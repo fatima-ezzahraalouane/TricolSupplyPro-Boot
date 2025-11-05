@@ -51,6 +51,15 @@ public class Fournisseur {
     @Builder.Default
     private List<CommandeFournisseur> commandes = new ArrayList<>();
 
-    
+    @PrePersist
+    protected void onCreate() {
+        createdAt = LocalDateTime.now();
+        updatedAt = LocalDateTime.now();
+    }
+
+    @PreUpdate
+    protected void onUpdate() {
+        updatedAt = LocalDateTime.now();
+    }
 }
 
