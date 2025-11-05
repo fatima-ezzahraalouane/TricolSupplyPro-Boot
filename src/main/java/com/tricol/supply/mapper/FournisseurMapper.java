@@ -10,6 +10,8 @@ import java.util.List;
 @Mapper(componentModel = "spring")
 public interface FournisseurMapper {
     
+    FournisseurDTO toDTO(Fournisseur fournisseur);
+    
     
 }
 
