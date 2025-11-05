@@ -1,0 +1,45 @@
+databaseChangeLog:
+  - changeSet:
+      id: create-table-commande-fournisseur
+      author: TricolSupplyPro
+      changes:
+        - createTable:
+            tableName: commandes_fournisseur
+            columns:
+              - column:
+                  name: id
+                  type: BIGSERIAL
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: date_commande
+                  type: TIMESTAMP
+                  constraints:
+                    nullable: false
+              - column:
+                  name: statut
+                  type: statut_commande
+                  constraints:
+                    nullable: false
+              - column:
+                  name: montant_total
+                  type: DECIMAL(19, 2)
+                  defaultValueNumeric: 0
+              - column:
+                  name: fournisseur_id
+                  type: BIGINT
+                  constraints:
+                    nullable: false
+                    foreignKeyName: fk_commande_fournisseur
+                    referencedTableName: fournisseurs
+                    referencedColumnNames: id
+              - column:
+                  name: created_at
+                  type: TIMESTAMP
+                  defaultValueComputed: CURRENT_TIMESTAMP
+              - column:
+                  name: updated_at
+                  type: TIMESTAMP
+                  defaultValueComputed: CURRENT_TIMESTAMP
+
