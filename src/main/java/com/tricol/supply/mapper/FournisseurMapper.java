@@ -15,6 +15,8 @@ public interface FournisseurMapper {
     @Mapping(target = "createdAt", ignore = true)
     @Mapping(target = "updatedAt", ignore = true)
     @Mapping(target = "commandes", ignore = true)
+    Fournisseur toEntity(FournisseurDTO fournisseurDTO);
+    
     
 }
 
