@@ -1,0 +1,23 @@
+databaseChangeLog:
+  - include:
+      file: db/changelog/migrations/001-create-enum-statut-commande.yaml
+  - include:
+      file: db/changelog/migrations/002-create-enum-type-mouvement.yaml
+  - include:
+      file: db/changelog/migrations/003-create-fournisseurs-table.yaml
+  - include:
+      file: db/changelog/migrations/004-create-fournisseurs-indexes.yaml
+  - include:
+      file: db/changelog/migrations/005-create-produits-table.yaml
+  - include:
+      file: db/changelog/migrations/006-create-produits-indexes.yaml
+  - include:
+      file: db/changelog/migrations/007-create-commandes-fournisseur-table.yaml
+  - include:
+      file: db/changelog/migrations/008-create-commandes-fournisseur-indexes.yaml
+  - include:
+      file: db/changelog/migrations/009-create-commandes-produits-table.yaml
+  - include:
+      file: db/changelog/migrations/010-create-mouvements-stock-table.yaml
+  - include:
+      file: db/changelog/migrations/011-create-mouvements-stock-indexes.yaml
