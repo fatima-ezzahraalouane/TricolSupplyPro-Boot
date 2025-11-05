@@ -17,6 +17,6 @@ public interface FournisseurMapper {
     @Mapping(target = "commandes", ignore = true)
     Fournisseur toEntity(FournisseurDTO fournisseurDTO);
     
-    
+    List<FournisseurDTO> toDTOList(List<Fournisseur> fournisseurs);
 }
 
