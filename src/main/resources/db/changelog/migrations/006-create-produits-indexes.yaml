@@ -1,0 +1,12 @@
+databaseChangeLog:
+  - changeSet:
+      id: create-indexes-produit
+      author: TricolSupplyPro
+      changes:
+        - createIndex:
+            tableName: produits
+            indexName: idx_produit_nom
+            columns:
+              - column:
+                  name: nom
+
