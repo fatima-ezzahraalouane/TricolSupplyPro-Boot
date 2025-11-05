@@ -1,0 +1,9 @@
+databaseChangeLog:
+  - changeSet:
+      id: create-enum-type-mouvement
+      author: TricolSupplyPro
+      changes:
+        - sql:
+            sql: |
+              CREATE TYPE type_mouvement AS ENUM ('ENTREE', 'SORTIE', 'AJUSTEMENT');
+
