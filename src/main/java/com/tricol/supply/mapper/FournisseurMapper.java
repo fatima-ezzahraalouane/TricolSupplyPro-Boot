@@ -12,6 +12,9 @@ public interface FournisseurMapper {
     
     FournisseurDTO toDTO(Fournisseur fournisseur);
     
+    @Mapping(target = "createdAt", ignore = true)
+    @Mapping(target = "updatedAt", ignore = true)
+    @Mapping(target = "commandes", ignore = true)
     
 }
 
