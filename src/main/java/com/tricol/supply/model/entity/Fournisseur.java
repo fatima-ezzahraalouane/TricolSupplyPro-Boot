@@ -47,6 +47,10 @@ public class Fournisseur {
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
 
+    @OneToMany(mappedBy = "fournisseur", cascade = CascadeType.ALL, orphanRemoval = true)
+    @Builder.Default
+    private List<CommandeFournisseur> commandes = new ArrayList<>();
+
     
 }
 
