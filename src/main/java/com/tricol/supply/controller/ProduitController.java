@@ -21,6 +21,8 @@ import java.util.Map;
 @Tag(name = "Produits", description = "Gestion des produits")
 public class ProduitController {
     
+    private final ProduitService produitService;
+    
     
 }
 
