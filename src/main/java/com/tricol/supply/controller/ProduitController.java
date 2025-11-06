@@ -39,6 +39,13 @@ public class ProduitController {
         return ResponseEntity.ok(produit);
     }
     
+    @PostMapping
+    @Operation(summary = "Créer un produit", description = "Crée un nouveau produit")
+    public ResponseEntity<ProduitDTO> createProduit(@Valid @RequestBody ProduitDTO produitDTO) {
+        ProduitDTO created = produitService.create(produitDTO);
+        return ResponseEntity.status(HttpStatus.CREATED).body(created);
+    }
+    
     
 }
 
