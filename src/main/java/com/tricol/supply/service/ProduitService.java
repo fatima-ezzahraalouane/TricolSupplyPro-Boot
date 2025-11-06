@@ -18,6 +18,11 @@ public class ProduitService {
     private final ProduitRepository produitRepository;
     private final ProduitMapper produitMapper;
     
+    public Page<ProduitDTO> findAll(Pageable pageable) {
+        return produitRepository.findAll(pageable)
+            .map(produitMapper::toDTO);
+    }
+    
     
 }
 
