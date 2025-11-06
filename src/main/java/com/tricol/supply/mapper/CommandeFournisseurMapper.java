@@ -23,6 +23,10 @@ public interface CommandeFournisseurMapper {
     @Mapping(target = "updatedAt", ignore = true)
     CommandeFournisseur toEntity(CommandeFournisseurDTO commandeDTO);
     
+    @Mapping(target = "fournisseur", source = "fournisseur")
+    @Mapping(target = "produits", expression = "java(mapProduits(commande))")
+    CommandeFournisseurDetailDTO toDetailDTO(CommandeFournisseur commande);
+    
     
 }
 
