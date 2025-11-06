@@ -73,6 +73,14 @@ public class CommandeFournisseurController {
         return ResponseEntity.ok(Map.of("message", "Commande supprimée avec succès"));
     }
     
-    
+    @PatchMapping("/{id}/statut")
+    @Operation(summary = "Changer le statut", description = "Change le statut d'une commande")
+    public ResponseEntity<CommandeFournisseurDetailDTO> changerStatut(
+        @PathVariable Long id,
+        @RequestParam StatutCommande statut
+    ) {
+        CommandeFournisseurDetailDTO updated = commandeService.changerStatut(id, statut);
+        return ResponseEntity.ok(updated);
+    }
 }
 
