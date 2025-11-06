@@ -11,20 +11,6 @@ public enum StatutCommande {
     LIVREE("Livrée"),
     ANNULEE("Annulée");
 
-    private final String libelle;
-
-    StatutCommande(String libelle) {
-        this.libelle = libelle;
-    }
-
-    @JsonValue
-    public String getLibelle() {
-        return libelle;
-    }
-
-    @Override
-    public String toString() {
-        return libelle;
-    }
+    
 }
 
