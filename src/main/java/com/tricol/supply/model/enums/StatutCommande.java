@@ -11,6 +11,12 @@ public enum StatutCommande {
     LIVREE("Livrée"),
     ANNULEE("Annulée");
 
+    private final String libelle;
+
+    StatutCommande(String libelle) {
+        this.libelle = libelle;
+    }
+
     
 }
 
