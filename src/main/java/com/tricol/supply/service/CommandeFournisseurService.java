@@ -90,6 +90,55 @@ public class CommandeFournisseurService {
         return commandeMapper.toDetailDTO(commande);
     }
     
+    @Transactional
+    public CommandeFournisseurDetailDTO update(Long id, CommandeFournisseurDTO dto) {
+        CommandeFournisseur existing = commandeRepository.findById(id)
+            .orElseThrow(() -> new ResourceNotFoundException("Commande", id));
+        
+        // verifier qu'on ne peut modifier que les commandes EN_ATTENTE
+        if (existing.getStatut() != StatutCommande.EN_ATTENTE) {
+            throw new IllegalArgumentException("Seules les commandes en attente peuvent être modifiées");
+        }
+        
+        // verifier le fournisseur
+        Fournisseur fournisseur = fournisseurRepository.findById(dto.getFournisseurId())
+            .orElseThrow(() -> new ResourceNotFoundException("Fournisseur", dto.getFournisseurId()));
+        
+        existing.setFournisseur(fournisseur);
+        existing.setStatut(dto.getStatut());
+        
+        // supprimer les anciens produits
+        commandeProduitRepository.deleteAll(existing.getCommandeProduits());
+        
+        // ajouter les nouveaux produits
+        List<CommandeProduit> commandeProduits = new ArrayList<>();
+        BigDecimal montantTotal = BigDecimal.ZERO;
+        
+        for (ProduitCommandeDTO produitDTO : dto.getProduits()) {
+            Produit produit = produitRepository.findById(produitDTO.getProduitId())
+                .orElseThrow(() -> new ResourceNotFoundException("Produit", produitDTO.getProduitId()));
+            
+            CommandeProduit cp = CommandeProduit.builder()
+                .commande(existing)
+                .produit(produit)
+                .quantite(produitDTO.getQuantite())
+                .prixUnitaireCommande(produitDTO.getPrixUnitaireCommande())
+                .build();
+            
+            commandeProduits.add(cp);
+            
+            BigDecimal montantLigne = produitDTO.getPrixUnitaireCommande()
+                .multiply(BigDecimal.valueOf(produitDTO.getQuantite()));
+            montantTotal = montantTotal.add(montantLigne);
+        }
+        
+        commandeProduitRepository.saveAll(commandeProduits);
+        existing.setMontantTotal(montantTotal);
+        
+        CommandeFournisseur updated = commandeRepository.save(existing);
+        return commandeMapper.toDetailDTO(updated);
+    }
+    
     
 }
 
