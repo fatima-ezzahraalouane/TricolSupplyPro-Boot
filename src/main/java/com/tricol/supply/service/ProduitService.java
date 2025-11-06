@@ -16,6 +16,8 @@ import org.springframework.transaction.annotation.Transactional;
 public class ProduitService {
     
     private final ProduitRepository produitRepository;
+    private final ProduitMapper produitMapper;
+    
     
 }
 
