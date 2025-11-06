@@ -56,6 +56,16 @@ public class CommandeFournisseurController {
         return ResponseEntity.status(HttpStatus.CREATED).body(created);
     }
     
+    @PutMapping("/{id}")
+    @Operation(summary = "Modifier une commande", description = "Met à jour une commande existante (seulement EN_ATTENTE)")
+    public ResponseEntity<CommandeFournisseurDetailDTO> updateCommande(
+        @PathVariable Long id,
+        @Valid @RequestBody CommandeFournisseurDTO commandeDTO
+    ) {
+        CommandeFournisseurDetailDTO updated = commandeService.update(id, commandeDTO);
+        return ResponseEntity.ok(updated);
+    }
+    
     
 }
 
