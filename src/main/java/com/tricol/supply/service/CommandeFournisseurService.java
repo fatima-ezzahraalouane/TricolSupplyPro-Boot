@@ -152,6 +152,22 @@ public class CommandeFournisseurService {
         commandeRepository.deleteById(id);
     }
     
+    @Transactional
+    public CommandeFournisseurDetailDTO changerStatut(Long id, StatutCommande nouveauStatut) {
+        CommandeFournisseur commande = commandeRepository.findById(id)
+            .orElseThrow(() -> new ResourceNotFoundException("Commande", id));
+        
+        // gerer automatiquement les mouvements de stock lors de la livraison
+        if (nouveauStatut == StatutCommande.LIVREE && commande.getStatut() != StatutCommande.LIVREE) {
+            creerMouvementsStockPourLivraison(commande);
+        }
+        
+        commande.setStatut(nouveauStatut);
+        CommandeFournisseur updated = commandeRepository.save(commande);
+        
+        return commandeMapper.toDetailDTO(updated);
+    }
+    
     
 }
 
