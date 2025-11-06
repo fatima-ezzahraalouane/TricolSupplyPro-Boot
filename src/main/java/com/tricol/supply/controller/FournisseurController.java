@@ -21,6 +21,8 @@ import java.util.Map;
 @Tag(name = "Fournisseurs", description = "Gestion des fournisseurs")
 public class FournisseurController {
     
+    private final FournisseurService fournisseurService;
+    
     
 }
 
