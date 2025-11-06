@@ -23,6 +23,15 @@ public class FournisseurController {
     
     private final FournisseurService fournisseurService;
     
+    @GetMapping
+    @Operation(summary = "Liste des fournisseurs", description = "Retourne une liste paginée de tous les fournisseurs")
+    public ResponseEntity<Page<FournisseurDTO>> getAllFournisseurs(
+        @PageableDefault(size = 10, sort = "id") Pageable pageable
+    ) {
+        Page<FournisseurDTO> fournisseurs = fournisseurService.findAll(pageable);
+        return ResponseEntity.ok(fournisseurs);
+    }
+    
     
 }
 
