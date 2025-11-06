@@ -186,6 +186,14 @@ public class CommandeFournisseurService {
         }
     }
     
-    
+    public List<CommandeFournisseurDTO> findByFournisseur(Long fournisseurId) {
+        Fournisseur fournisseur = fournisseurRepository.findById(fournisseurId)
+            .orElseThrow(() -> new ResourceNotFoundException("Fournisseur", fournisseurId));
+        
+        List<CommandeFournisseur> commandes = commandeRepository.findByFournisseur(fournisseur);
+        return commandes.stream()
+            .map(commandeMapper::toDTO)
+            .toList();
+    }
 }
 
