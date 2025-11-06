@@ -29,6 +29,13 @@ public class ProduitService {
         return produitMapper.toDTO(produit);
     }
     
+    @Transactional
+    public ProduitDTO create(ProduitDTO dto) {
+        Produit produit = produitMapper.toEntity(dto);
+        Produit saved = produitRepository.save(produit);
+        return produitMapper.toDTO(saved);
+    }
+    
     
 }
 
