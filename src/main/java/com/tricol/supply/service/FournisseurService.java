@@ -55,6 +55,12 @@ public class FournisseurService {
         return fournisseurMapper.toDTO(updated);
     }
     
-    
+    @Transactional
+    public void delete(Long id) {
+        if (!fournisseurRepository.existsById(id)) {
+            throw new ResourceNotFoundException("Fournisseur", id);
+        }
+        fournisseurRepository.deleteById(id);
+    }
 }
 
