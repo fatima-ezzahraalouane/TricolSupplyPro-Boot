@@ -20,6 +20,7 @@ public class CommandeFournisseurDetailDTO {
     
     private List<ProduitCommandeDTO> produits = new ArrayList<>();
     
-    
+    private LocalDateTime createdAt;
+    private LocalDateTime updatedAt;
 }
 
