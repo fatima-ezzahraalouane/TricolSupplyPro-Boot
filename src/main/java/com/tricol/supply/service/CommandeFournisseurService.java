@@ -26,6 +26,7 @@ public class CommandeFournisseurService {
     private final FournisseurRepository fournisseurRepository;
     private final ProduitRepository produitRepository;
     private final CommandeProduitRepository commandeProduitRepository;
+    private final MouvementStockRepository mouvementStockRepository;
     
 }
 
