@@ -36,6 +36,12 @@ public interface CommandeFournisseurMapper {
             .collect(Collectors.toList());
     }
     
-    
+    default ProduitCommandeDTO toProduitCommandeDTO(CommandeProduit cp) {
+        ProduitCommandeDTO dto = new ProduitCommandeDTO();
+        dto.setProduitId(cp.getProduit().getId());
+        dto.setQuantite(cp.getQuantite());
+        dto.setPrixUnitaireCommande(cp.getPrixUnitaireCommande());
+        return dto;
+    }
 }
 
