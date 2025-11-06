@@ -12,6 +12,10 @@ import java.util.stream.Collectors;
 @Mapper(componentModel = "spring", uses = {FournisseurMapper.class})
 public interface CommandeFournisseurMapper {
     
+    @Mapping(target = "produits", expression = "java(mapProduits(commande))")
+    @Mapping(target = "fournisseurId", source = "fournisseur.id")
+    CommandeFournisseurDTO toDTO(CommandeFournisseur commande);
+    
     
 }
 
