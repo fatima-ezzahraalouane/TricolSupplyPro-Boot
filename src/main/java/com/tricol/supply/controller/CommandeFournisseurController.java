@@ -49,6 +49,13 @@ public class CommandeFournisseurController {
         return ResponseEntity.ok(commandes);
     }
     
+    @PostMapping
+    @Operation(summary = "Créer une commande", description = "Crée une nouvelle commande fournisseur")
+    public ResponseEntity<CommandeFournisseurDetailDTO> createCommande(@Valid @RequestBody CommandeFournisseurDTO commandeDTO) {
+        CommandeFournisseurDetailDTO created = commandeService.create(commandeDTO);
+        return ResponseEntity.status(HttpStatus.CREATED).body(created);
+    }
+    
     
 }
 
