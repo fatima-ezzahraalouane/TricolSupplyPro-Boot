@@ -25,6 +25,10 @@ public class CommandeProduit {
     @JoinColumn(name = "produit_id", nullable = false)
     private Produit produit;
 
-    
+    @Column(nullable = false)
+    private Integer quantite;
+
+    @Column(name = "prix_unitaire_commande", nullable = false, precision = 19, scale = 2)
+    private BigDecimal prixUnitaireCommande;
 }
 
