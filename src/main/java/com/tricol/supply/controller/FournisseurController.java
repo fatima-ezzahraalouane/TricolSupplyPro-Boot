@@ -46,6 +46,16 @@ public class FournisseurController {
         return ResponseEntity.status(HttpStatus.CREATED).body(created);
     }
     
+    @PutMapping("/{id}")
+    @Operation(summary = "Modifier un fournisseur", description = "Met à jour un fournisseur existant")
+    public ResponseEntity<FournisseurDTO> updateFournisseur(
+        @PathVariable Long id,
+        @Valid @RequestBody FournisseurDTO fournisseurDTO
+    ) {
+        FournisseurDTO updated = fournisseurService.update(id, fournisseurDTO);
+        return ResponseEntity.ok(updated);
+    }
+    
     
 }
 
