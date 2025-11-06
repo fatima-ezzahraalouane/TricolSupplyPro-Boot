@@ -15,6 +15,11 @@ import java.math.BigDecimal;
 @Builder
 public class CommandeProduit {
 
+    @Id
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "commande_id", nullable = false)
+    private CommandeFournisseur commande;
+
     
 }
 
