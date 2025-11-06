@@ -51,6 +51,15 @@ public class Produit {
     @Builder.Default
     private List<MouvementStock> mouvements = new ArrayList<>();
 
-    
+    @PrePersist
+    protected void onCreate() {
+        createdAt = LocalDateTime.now();
+        updatedAt = LocalDateTime.now();
+    }
+
+    @PreUpdate
+    protected void onUpdate() {
+        updatedAt = LocalDateTime.now();
+    }
 }
 
