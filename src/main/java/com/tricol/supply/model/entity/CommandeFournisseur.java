@@ -33,6 +33,18 @@ public class CommandeFournisseur {
     @Builder.Default
     private BigDecimal montantTotal = BigDecimal.ZERO;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "fournisseur_id", nullable = false)
+    private Fournisseur fournisseur;
+
+    @OneToMany(mappedBy = "commandeFournisseur", cascade = CascadeType.ALL, orphanRemoval = true)
+    @Builder.Default
+    private List<MouvementStock> mouvements = new ArrayList<>();
+
+    @OneToMany(mappedBy = "commande", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    @Builder.Default
+    private List<CommandeProduit> commandeProduits = new ArrayList<>();
+
     
 }
 
