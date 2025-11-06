@@ -56,6 +56,11 @@ public class ProduitController {
         return ResponseEntity.ok(updated);
     }
     
-    
+    @DeleteMapping("/{id}")
+    @Operation(summary = "Supprimer un produit", description = "Supprime un produit")
+    public ResponseEntity<Map<String, String>> deleteProduit(@PathVariable Long id) {
+        produitService.delete(id);
+        return ResponseEntity.ok(Map.of("message", "Produit supprimé avec succès"));
+    }
 }
 
