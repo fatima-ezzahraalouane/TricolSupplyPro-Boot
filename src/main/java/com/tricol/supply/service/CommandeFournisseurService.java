@@ -30,6 +30,11 @@ public class CommandeFournisseurService {
     private final CommandeFournisseurMapper commandeMapper;
     private final StockService stockService;
     
+    public Page<CommandeFournisseurDTO> findAll(Pageable pageable) {
+        return commandeRepository.findAll(pageable)
+            .map(commandeMapper::toDTO);
+    }
+    
     
 }
 
