@@ -32,6 +32,13 @@ public class ProduitController {
         return ResponseEntity.ok(produits);
     }
     
+    @GetMapping("/{id}")
+    @Operation(summary = "Détails d'un produit", description = "Retourne les détails d'un produit par son ID")
+    public ResponseEntity<ProduitDTO> getProduitById(@PathVariable Long id) {
+        ProduitDTO produit = produitService.findById(id);
+        return ResponseEntity.ok(produit);
+    }
+    
     
 }
 
