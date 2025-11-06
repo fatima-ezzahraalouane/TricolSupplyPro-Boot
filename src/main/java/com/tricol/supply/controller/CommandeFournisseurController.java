@@ -24,6 +24,8 @@ import java.util.Map;
 @Tag(name = "Commandes Fournisseurs", description = "Gestion des commandes fournisseurs")
 public class CommandeFournisseurController {
     
+    private final CommandeFournisseurService commandeService;
+    
     
 }
 
