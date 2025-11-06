@@ -12,6 +12,11 @@ public interface ProduitMapper {
     
     ProduitDTO toDTO(Produit produit);
     
+    @Mapping(target = "createdAt", ignore = true)
+    @Mapping(target = "updatedAt", ignore = true)
+    @Mapping(target = "mouvements", ignore = true)
+    Produit toEntity(ProduitDTO produitDTO);
+    
     
 }
 
