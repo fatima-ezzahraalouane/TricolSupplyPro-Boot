@@ -46,6 +46,16 @@ public class ProduitController {
         return ResponseEntity.status(HttpStatus.CREATED).body(created);
     }
     
+    @PutMapping("/{id}")
+    @Operation(summary = "Modifier un produit", description = "Met à jour un produit existant")
+    public ResponseEntity<ProduitDTO> updateProduit(
+        @PathVariable Long id,
+        @Valid @RequestBody ProduitDTO produitDTO
+    ) {
+        ProduitDTO updated = produitService.update(id, produitDTO);
+        return ResponseEntity.ok(updated);
+    }
+    
     
 }
 
