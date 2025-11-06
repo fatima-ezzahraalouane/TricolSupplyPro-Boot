@@ -18,6 +18,21 @@ import java.util.List;
 @Builder
 public class CommandeFournisseur {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @Column(name = "date_commande", nullable = false)
+    private LocalDateTime dateCommande;
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private StatutCommande statut;
+
+    @Column(name = "montant_total", precision = 19, scale = 2)
+    @Builder.Default
+    private BigDecimal montantTotal = BigDecimal.ZERO;
+
     
 }
 
