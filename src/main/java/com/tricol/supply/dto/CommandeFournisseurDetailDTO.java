@@ -16,6 +16,8 @@ public class CommandeFournisseurDetailDTO {
     private StatutCommande statut;
     private BigDecimal montantTotal;
     
+    private FournisseurDTO fournisseur;
+    
     
 }
 
