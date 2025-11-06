@@ -23,6 +23,12 @@ public class ProduitService {
             .map(produitMapper::toDTO);
     }
     
+    public ProduitDTO findById(Long id) {
+        Produit produit = produitRepository.findById(id)
+            .orElseThrow(() -> new ResourceNotFoundException("Produit", id));
+        return produitMapper.toDTO(produit);
+    }
+    
     
 }
 
