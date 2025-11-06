@@ -27,6 +27,15 @@ public interface CommandeFournisseurMapper {
     @Mapping(target = "produits", expression = "java(mapProduits(commande))")
     CommandeFournisseurDetailDTO toDetailDTO(CommandeFournisseur commande);
     
+    default List<ProduitCommandeDTO> mapProduits(CommandeFournisseur commande) {
+        if (commande.getCommandeProduits() == null) {
+            return List.of();
+        }
+        return commande.getCommandeProduits().stream()
+            .map(this::toProduitCommandeDTO)
+            .collect(Collectors.toList());
+    }
+    
     
 }
 
