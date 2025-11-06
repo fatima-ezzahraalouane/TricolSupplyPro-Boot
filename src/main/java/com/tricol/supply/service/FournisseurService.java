@@ -18,6 +18,8 @@ import java.util.List;
 public class FournisseurService {
     
     private final FournisseurRepository fournisseurRepository;
+    private final FournisseurMapper fournisseurMapper;
+    
     
 }
 
