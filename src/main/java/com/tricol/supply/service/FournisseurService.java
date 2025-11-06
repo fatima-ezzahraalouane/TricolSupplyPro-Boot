@@ -25,6 +25,12 @@ public class FournisseurService {
             .map(fournisseurMapper::toDTO);
     }
     
+    public FournisseurDTO findById(Long id) {
+        Fournisseur fournisseur = fournisseurRepository.findById(id)
+            .orElseThrow(() -> new ResourceNotFoundException("Fournisseur", id));
+        return fournisseurMapper.toDTO(fournisseur);
+    }
+    
     
 }
 
