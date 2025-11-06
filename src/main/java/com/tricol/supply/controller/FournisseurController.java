@@ -39,6 +39,13 @@ public class FournisseurController {
         return ResponseEntity.ok(fournisseur);
     }
     
+    @PostMapping
+    @Operation(summary = "Créer un fournisseur", description = "Crée un nouveau fournisseur")
+    public ResponseEntity<FournisseurDTO> createFournisseur(@Valid @RequestBody FournisseurDTO fournisseurDTO) {
+        FournisseurDTO created = fournisseurService.create(fournisseurDTO);
+        return ResponseEntity.status(HttpStatus.CREATED).body(created);
+    }
+    
     
 }
 
