@@ -26,6 +26,15 @@ public class CommandeFournisseurController {
     
     private final CommandeFournisseurService commandeService;
     
+    @GetMapping
+    @Operation(summary = "Liste des commandes", description = "Retourne une liste paginée de toutes les commandes")
+    public ResponseEntity<Page<CommandeFournisseurDTO>> getAllCommandes(
+        @PageableDefault(size = 10, sort = "id") Pageable pageable
+    ) {
+        Page<CommandeFournisseurDTO> commandes = commandeService.findAll(pageable);
+        return ResponseEntity.ok(commandes);
+    }
+    
     
 }
 
