@@ -17,6 +17,14 @@ public enum StatutCommande {
         this.libelle = libelle;
     }
 
-    
+    @JsonValue
+    public String getLibelle() {
+        return libelle;
+    }
+
+    @Override
+    public String toString() {
+        return libelle;
+    }
 }
 
