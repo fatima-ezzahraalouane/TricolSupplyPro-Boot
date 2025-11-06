@@ -66,6 +66,13 @@ public class CommandeFournisseurController {
         return ResponseEntity.ok(updated);
     }
     
+    @DeleteMapping("/{id}")
+    @Operation(summary = "Supprimer une commande", description = "Supprime une commande (seulement EN_ATTENTE ou ANNULEE)")
+    public ResponseEntity<Map<String, String>> deleteCommande(@PathVariable Long id) {
+        commandeService.delete(id);
+        return ResponseEntity.ok(Map.of("message", "Commande supprimée avec succès"));
+    }
+    
     
 }
 
