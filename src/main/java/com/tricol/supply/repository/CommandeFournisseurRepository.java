@@ -9,6 +9,6 @@ import java.util.List;
 
 @Repository
 public interface CommandeFournisseurRepository extends JpaRepository<CommandeFournisseur, Long> {
-    
+    List<CommandeFournisseur> findByFournisseur(Fournisseur fournisseur);
 }
 
