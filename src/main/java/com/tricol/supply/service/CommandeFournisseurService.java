@@ -35,6 +35,12 @@ public class CommandeFournisseurService {
             .map(commandeMapper::toDTO);
     }
     
+    public CommandeFournisseurDetailDTO findById(Long id) {
+        CommandeFournisseur commande = commandeRepository.findById(id)
+            .orElseThrow(() -> new ResourceNotFoundException("Commande", id));
+        return commandeMapper.toDetailDTO(commande);
+    }
+    
     
 }
 
