@@ -11,6 +11,7 @@ import java.io.Serializable;
 @AllArgsConstructor
 public class CommandeProduitId implements Serializable {
 
-    
+    private Long commande;
+    private Long produit;
 }
 
