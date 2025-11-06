@@ -50,6 +50,12 @@ public class ProduitService {
         return produitMapper.toDTO(updated);
     }
     
-    
+    @Transactional
+    public void delete(Long id) {
+        if (!produitRepository.existsById(id)) {
+            throw new ResourceNotFoundException("Produit", id);
+        }
+        produitRepository.deleteById(id);
+    }
 }
 
