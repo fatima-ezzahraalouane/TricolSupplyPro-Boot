@@ -1,0 +1,20 @@
+package com.tricol.supply.model.entity;
+
+import jakarta.persistence.*;
+import lombok.*;
+
+import java.math.BigDecimal;
+
+@Entity
+@Table(name = "commandes_produits")
+@IdClass(CommandeProduitId.class)
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
+public class CommandeProduit {
+
+    
+}
+
