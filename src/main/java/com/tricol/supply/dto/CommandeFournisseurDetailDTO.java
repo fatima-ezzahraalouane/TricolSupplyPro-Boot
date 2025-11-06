@@ -11,6 +11,11 @@ import java.util.List;
 @Data
 public class CommandeFournisseurDetailDTO {
     
+    private Long id;
+    private LocalDateTime dateCommande;
+    private StatutCommande statut;
+    private BigDecimal montantTotal;
+    
     
 }
 
