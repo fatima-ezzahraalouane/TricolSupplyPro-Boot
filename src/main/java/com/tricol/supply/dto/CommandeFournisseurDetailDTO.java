@@ -18,6 +18,8 @@ public class CommandeFournisseurDetailDTO {
     
     private FournisseurDTO fournisseur;
     
+    private List<ProduitCommandeDTO> produits = new ArrayList<>();
+    
     
 }
 
