@@ -22,4 +22,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class CommandeFournisseurService {
     
+    private final CommandeFournisseurRepository commandeRepository;
     
+}
+
