@@ -38,6 +38,23 @@ public class FournisseurService {
         return fournisseurMapper.toDTO(saved);
     }
     
+    @Transactional
+    public FournisseurDTO update(Long id, FournisseurDTO dto) {
+        Fournisseur existing = fournisseurRepository.findById(id)
+            .orElseThrow(() -> new ResourceNotFoundException("Fournisseur", id));
+        
+        existing.setSociete(dto.getSociete());
+        existing.setAdresse(dto.getAdresse());
+        existing.setContact(dto.getContact());
+        existing.setEmail(dto.getEmail());
+        existing.setTelephone(dto.getTelephone());
+        existing.setVille(dto.getVille());
+        existing.setIce(dto.getIce());
+        
+        Fournisseur updated = fournisseurRepository.save(existing);
+        return fournisseurMapper.toDTO(updated);
+    }
+    
     
 }
 
