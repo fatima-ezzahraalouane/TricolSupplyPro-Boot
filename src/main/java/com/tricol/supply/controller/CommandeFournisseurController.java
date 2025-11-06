@@ -35,6 +35,13 @@ public class CommandeFournisseurController {
         return ResponseEntity.ok(commandes);
     }
     
+    @GetMapping("/{id}")
+    @Operation(summary = "Détails d'une commande", description = "Retourne les détails d'une commande par son ID")
+    public ResponseEntity<CommandeFournisseurDetailDTO> getCommandeById(@PathVariable Long id) {
+        CommandeFournisseurDetailDTO commande = commandeService.findById(id);
+        return ResponseEntity.ok(commande);
+    }
+    
     
 }
 
