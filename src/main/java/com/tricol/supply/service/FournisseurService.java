@@ -17,6 +17,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class FournisseurService {
     
+    private final FournisseurRepository fournisseurRepository;
     
 }
 
