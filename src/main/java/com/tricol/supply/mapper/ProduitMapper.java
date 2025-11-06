@@ -17,6 +17,6 @@ public interface ProduitMapper {
     @Mapping(target = "mouvements", ignore = true)
     Produit toEntity(ProduitDTO produitDTO);
     
-    
+    List<ProduitDTO> toDTOList(List<Produit> produits);
 }
 
