@@ -42,6 +42,13 @@ public class CommandeFournisseurController {
         return ResponseEntity.ok(commande);
     }
     
+    @GetMapping("/fournisseur/{id}")
+    @Operation(summary = "Commandes d'un fournisseur", description = "Retourne toutes les commandes d'un fournisseur spécifique")
+    public ResponseEntity<List<CommandeFournisseurDTO>> getCommandesByFournisseur(@PathVariable Long id) {
+        List<CommandeFournisseurDTO> commandes = commandeService.findByFournisseur(id);
+        return ResponseEntity.ok(commandes);
+    }
+    
     
 }
 
