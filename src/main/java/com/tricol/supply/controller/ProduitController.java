@@ -23,6 +23,15 @@ public class ProduitController {
     
     private final ProduitService produitService;
     
+    @GetMapping
+    @Operation(summary = "Liste des produits", description = "Retourne une liste paginée de tous les produits")
+    public ResponseEntity<Page<ProduitDTO>> getAllProduits(
+        @PageableDefault(size = 10, sort = "id") Pageable pageable
+    ) {
+        Page<ProduitDTO> produits = produitService.findAll(pageable);
+        return ResponseEntity.ok(produits);
+    }
+    
     
 }
 
