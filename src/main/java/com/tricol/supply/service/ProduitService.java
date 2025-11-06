@@ -36,6 +36,20 @@ public class ProduitService {
         return produitMapper.toDTO(saved);
     }
     
+    @Transactional
+    public ProduitDTO update(Long id, ProduitDTO dto) {
+        Produit existing = produitRepository.findById(id)
+            .orElseThrow(() -> new ResourceNotFoundException("Produit", id));
+        
+        existing.setNom(dto.getNom());
+        existing.setDescription(dto.getDescription());
+        existing.setPrixUnitaire(dto.getPrixUnitaire());
+        existing.setCategorie(dto.getCategorie());
+        
+        Produit updated = produitRepository.save(existing);
+        return produitMapper.toDTO(updated);
+    }
+    
     
 }
 
