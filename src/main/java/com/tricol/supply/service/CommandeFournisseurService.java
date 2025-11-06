@@ -41,6 +41,55 @@ public class CommandeFournisseurService {
         return commandeMapper.toDetailDTO(commande);
     }
     
+    @Transactional
+    public CommandeFournisseurDetailDTO create(CommandeFournisseurDTO dto) {
+        // verifier que le fournisseur existe
+        Fournisseur fournisseur = fournisseurRepository.findById(dto.getFournisseurId())
+            .orElseThrow(() -> new ResourceNotFoundException("Fournisseur", dto.getFournisseurId()));
+        
+        // creer la commande
+        CommandeFournisseur commande = CommandeFournisseur.builder()
+            .dateCommande(LocalDateTime.now())
+            .statut(StatutCommande.EN_ATTENTE)
+            .fournisseur(fournisseur)
+            .montantTotal(BigDecimal.ZERO)
+            .build();
+        
+        commande = commandeRepository.save(commande);
+        
+        // ajouter les produits a la commande
+        List<CommandeProduit> commandeProduits = new ArrayList<>();
+        BigDecimal montantTotal = BigDecimal.ZERO;
+        
+        for (ProduitCommandeDTO produitDTO : dto.getProduits()) {
+            Produit produit = produitRepository.findById(produitDTO.getProduitId())
+                .orElseThrow(() -> new ResourceNotFoundException("Produit", produitDTO.getProduitId()));
+            
+            CommandeProduit cp = CommandeProduit.builder()
+                .commande(commande)
+                .produit(produit)
+                .quantite(produitDTO.getQuantite())
+                .prixUnitaireCommande(produitDTO.getPrixUnitaireCommande())
+                .build();
+            
+            commandeProduits.add(cp);
+            
+            // calculer le montant total
+            BigDecimal montantLigne = produitDTO.getPrixUnitaireCommande()
+                .multiply(BigDecimal.valueOf(produitDTO.getQuantite()));
+            montantTotal = montantTotal.add(montantLigne);
+        }
+        
+        // sauvegarder les produits de la commande
+        commandeProduitRepository.saveAll(commandeProduits);
+        
+        // mettre a jour le montant total
+        commande.setMontantTotal(montantTotal);
+        commande = commandeRepository.save(commande);
+        
+        return commandeMapper.toDetailDTO(commande);
+    }
+    
     
 }
 
