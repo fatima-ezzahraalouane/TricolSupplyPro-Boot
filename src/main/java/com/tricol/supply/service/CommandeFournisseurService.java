@@ -139,6 +139,19 @@ public class CommandeFournisseurService {
         return commandeMapper.toDetailDTO(updated);
     }
     
+    @Transactional
+    public void delete(Long id) {
+        CommandeFournisseur commande = commandeRepository.findById(id)
+            .orElseThrow(() -> new ResourceNotFoundException("Commande", id));
+        
+        // verifier qu'on ne peut supprimer que les commandes EN_ATTENTE ou ANNULEES
+        if (commande.getStatut() != StatutCommande.EN_ATTENTE && commande.getStatut() != StatutCommande.ANNULEE) {
+            throw new IllegalArgumentException("Seules les commandes en attente ou annulées peuvent être supprimées");
+        }
+        
+        commandeRepository.deleteById(id);
+    }
+    
     
 }
 
