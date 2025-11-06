@@ -31,6 +31,13 @@ public class FournisseurService {
         return fournisseurMapper.toDTO(fournisseur);
     }
     
+    @Transactional
+    public FournisseurDTO create(FournisseurDTO dto) {
+        Fournisseur fournisseur = fournisseurMapper.toEntity(dto);
+        Fournisseur saved = fournisseurRepository.save(fournisseur);
+        return fournisseurMapper.toDTO(saved);
+    }
+    
     
 }
 
