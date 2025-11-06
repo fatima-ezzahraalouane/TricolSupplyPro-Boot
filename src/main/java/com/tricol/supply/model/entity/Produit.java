@@ -47,6 +47,10 @@ public class Produit {
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
 
+    @OneToMany(mappedBy = "produit", cascade = CascadeType.ALL, orphanRemoval = true)
+    @Builder.Default
+    private List<MouvementStock> mouvements = new ArrayList<>();
+
     
 }
 
