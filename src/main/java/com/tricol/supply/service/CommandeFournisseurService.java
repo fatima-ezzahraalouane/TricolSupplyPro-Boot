@@ -23,6 +23,7 @@ import java.util.List;
 public class CommandeFournisseurService {
     
     private final CommandeFournisseurRepository commandeRepository;
+    private final FournisseurRepository fournisseurRepository;
     
 }
 
