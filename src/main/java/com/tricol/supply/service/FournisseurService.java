@@ -20,6 +20,11 @@ public class FournisseurService {
     private final FournisseurRepository fournisseurRepository;
     private final FournisseurMapper fournisseurMapper;
     
+    public Page<FournisseurDTO> findAll(Pageable pageable) {
+        return fournisseurRepository.findAll(pageable)
+            .map(fournisseurMapper::toDTO);
+    }
+    
     
 }
 
