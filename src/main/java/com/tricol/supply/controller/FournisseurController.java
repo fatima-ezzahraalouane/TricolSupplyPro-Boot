@@ -32,6 +32,13 @@ public class FournisseurController {
         return ResponseEntity.ok(fournisseurs);
     }
     
+    @GetMapping("/{id}")
+    @Operation(summary = "Détails d'un fournisseur", description = "Retourne les détails d'un fournisseur par son ID")
+    public ResponseEntity<FournisseurDTO> getFournisseurById(@PathVariable Long id) {
+        FournisseurDTO fournisseur = fournisseurService.findById(id);
+        return ResponseEntity.ok(fournisseur);
+    }
+    
     
 }
 
