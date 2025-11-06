@@ -20,6 +20,11 @@ public class CommandeProduit {
     @JoinColumn(name = "commande_id", nullable = false)
     private CommandeFournisseur commande;
 
+    @Id
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "produit_id", nullable = false)
+    private Produit produit;
+
     
 }
 
