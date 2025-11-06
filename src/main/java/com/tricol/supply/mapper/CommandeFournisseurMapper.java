@@ -16,6 +16,13 @@ public interface CommandeFournisseurMapper {
     @Mapping(target = "fournisseurId", source = "fournisseur.id")
     CommandeFournisseurDTO toDTO(CommandeFournisseur commande);
     
+    @Mapping(target = "fournisseur", ignore = true)
+    @Mapping(target = "mouvements", ignore = true)
+    @Mapping(target = "commandeProduits", ignore = true)
+    @Mapping(target = "createdAt", ignore = true)
+    @Mapping(target = "updatedAt", ignore = true)
+    CommandeFournisseur toEntity(CommandeFournisseurDTO commandeDTO);
+    
     
 }
 
