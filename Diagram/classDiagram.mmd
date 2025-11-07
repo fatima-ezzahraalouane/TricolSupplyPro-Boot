@@ -1,0 +1,71 @@
+classDiagram
+    class Fournisseur {
+        -Long id
+        -String societe
+        -String adresse
+        -String contact
+        -String email
+        -String telephone
+        -String ville
+        -String ice
+    }
+
+    class Produit {
+        -Long id
+        -String nom
+        -String description
+        -BigDecimal prixUnitaire
+        -String categorie
+        -Integer stockActuel
+        -BigDecimal coutUnitaireMoyen
+    }
+
+    class CommandeFournisseur {
+        -Long id
+        -LocalDateTime dateCommande
+        -StatutCommande statut
+        -BigDecimal montantTotal
+        -LocalDateTime createdAt
+        -LocalDateTime updatedAt
+    }
+
+    class CommandeProduit {
+        -Long id
+        -Integer quantite
+        -BigDecimal prixUnitaireCommande
+    }
+
+    class MouvementStock {
+        -Long id
+        -LocalDateTime dateMouvement
+        -TypeMouvement typeMouvement
+        -Integer quantite
+        -BigDecimal prixUnitaire
+        -LocalDateTime createdAt
+    }
+
+    class StatutCommande {
+        <<enumeration>>
+        EN_ATTENTE
+        VALIDEE
+        LIVREE
+        ANNULEE
+    }
+
+    class TypeMouvement {
+        <<enumeration>>
+        ENTREE
+        SORTIE
+        AJUSTEMENT
+    }
+
+%% Relations d'association
+    Fournisseur "1" -- "0..*" CommandeFournisseur : passe
+    CommandeFournisseur "1" -- "1..*" CommandeProduit : contient
+    CommandeProduit "*" -- "1" Produit : concerne
+    Produit "1" -- "0..*" MouvementStock : génère
+    CommandeFournisseur "0..1" -- "0..*" MouvementStock : déclenche
+
+%% Dépendances (Utilisation des Enums)
+    CommandeFournisseur ..> StatutCommande : utilise
+    MouvementStock ..> TypeMouvement : utilise
