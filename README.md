@@ -582,6 +582,30 @@ L'API retourne des réponses JSON structurées :
 - `404` : Ressource non trouvée
 - `500` : Erreur serveur
 
+### 📮 Collection Postman
+
+Une collection Postman complète est disponible pour tester tous les endpoints de l'API :
+
+📁 **Fichier** : `TricolSupplyPro.postman_collection.json`
+
+**Comment l'utiliser** :
+1. Ouvrir Postman
+2. Cliquer sur **Import**
+3. Sélectionner le fichier `TricolSupplyPro.postman_collection.json`
+4. La collection contient tous les endpoints avec des exemples de requêtes
+
+**Endpoints inclus** :
+- ✅ **Fournisseurs** : CRUD complet (5 requêtes)
+- ✅ **Produits** : CRUD complet (5 requêtes)
+- ✅ **Commandes Fournisseurs** : CRUD + changement de statut (7 requêtes)
+- ✅ **Mouvements de Stock** : Consultation par produit/commande (2 requêtes)
+
+**Variable d'environnement** :
+- `baseUrl` : `http://localhost:8080/api/v1` (modifiable selon votre configuration)
+
+**📋 Valeurs des Enums** :
+- Consultez le fichier `API_ENUMS.md` pour la liste complète des valeurs acceptées pour `StatutCommande` et `TypeMouvement`
+
 ---
 
 ## 📚 Documentation complémentaire
