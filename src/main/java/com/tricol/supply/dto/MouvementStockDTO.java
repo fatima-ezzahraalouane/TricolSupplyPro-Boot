@@ -9,6 +9,14 @@ import java.time.LocalDateTime;
 @Data
 public class MouvementStockDTO {
     
-    
+    private Long id;
+    private LocalDateTime dateMouvement;
+    private TypeMouvement typeMouvement;
+    private Integer quantite;
+    private BigDecimal prixUnitaire;
+    private Long produitId;
+    private String nomProduit;
+    private Long commandeFournisseurId;
+    private LocalDateTime createdAt;
 }
 
