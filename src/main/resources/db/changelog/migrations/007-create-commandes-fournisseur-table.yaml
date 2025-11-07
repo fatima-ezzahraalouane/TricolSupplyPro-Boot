@@ -19,7 +19,7 @@ databaseChangeLog:
                     nullable: false
               - column:
                   name: statut
-                  type: statut_commande
+                  type: VARCHAR(50)
                   constraints:
                     nullable: false
               - column:
