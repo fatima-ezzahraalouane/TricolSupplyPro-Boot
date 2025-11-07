@@ -8,6 +8,12 @@ public enum TypeMouvement {
     SORTIE("Sortie"),
     AJUSTEMENT("Ajustement");
 
+    private final String libelle;
+
+    TypeMouvement(String libelle) {
+        this.libelle = libelle;
+    }
+
     
 }
 
