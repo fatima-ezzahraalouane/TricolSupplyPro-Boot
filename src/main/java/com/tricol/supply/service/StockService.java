@@ -13,6 +13,9 @@ import java.math.RoundingMode;
 @RequiredArgsConstructor
 public class StockService {
     
+    private final ProduitRepository produitRepository;
+    
+    
     
     
 }
