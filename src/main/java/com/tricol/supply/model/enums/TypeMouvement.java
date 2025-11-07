@@ -4,6 +4,10 @@ import com.fasterxml.jackson.annotation.JsonValue;
 
 
 public enum TypeMouvement {
+    ENTREE("Entrée"),
+    SORTIE("Sortie"),
+    AJUSTEMENT("Ajustement");
+
     
 }
 
