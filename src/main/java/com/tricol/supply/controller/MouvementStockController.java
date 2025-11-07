@@ -18,6 +18,13 @@ public class MouvementStockController {
     
     private final MouvementStockService mouvementService;
     
+    @GetMapping("/produit/{produitId}")
+    @Operation(summary = "Mouvements d'un produit", description = "Retourne tous les mouvements de stock pour un produit")
+    public ResponseEntity<List<MouvementStockDTO>> getMouvementsByProduit(@PathVariable Long produitId) {
+        List<MouvementStockDTO> mouvements = mouvementService.findByProduit(produitId);
+        return ResponseEntity.ok(mouvements);
+    }
+    
     
 }
 
