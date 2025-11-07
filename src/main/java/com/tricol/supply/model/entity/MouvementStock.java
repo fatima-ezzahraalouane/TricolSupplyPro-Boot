@@ -41,6 +41,15 @@ public class MouvementStock {
     @JoinColumn(name = "commande_fournisseur_id")
     private CommandeFournisseur commandeFournisseur;
 
-    
+    @Column(name = "created_at", nullable = false, updatable = false)
+    private LocalDateTime createdAt;
+
+    @PrePersist
+    protected void onCreate() {
+        createdAt = LocalDateTime.now();
+        if (dateMouvement == null) {
+            dateMouvement = LocalDateTime.now();
+        }
+    }
 }
 
