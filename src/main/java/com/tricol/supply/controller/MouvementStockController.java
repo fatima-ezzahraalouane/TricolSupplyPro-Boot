@@ -16,6 +16,8 @@ import java.util.List;
 @Tag(name = "Mouvements de Stock", description = "Gestion des mouvements de stock")
 public class MouvementStockController {
     
+    private final MouvementStockService mouvementService;
+    
     
 }
 
