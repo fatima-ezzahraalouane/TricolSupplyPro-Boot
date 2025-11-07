@@ -15,6 +15,18 @@ public class StockService {
     
     private final ProduitRepository produitRepository;
     
+
+    // met a jour le stock et recalcule le cout unitaire moyen (CUMP)
+    @Transactional
+    public void miseAJourStock(Produit produit, Integer quantiteEntree, BigDecimal prixUnitaire) {
+        // mettre a jour la quantite en stock
+        produit.setStockActuel(produit.getStockActuel() + quantiteEntree);
+        
+        // recalculer le cout unitaire moyen pondere
+        calculerCUMP(produit, quantiteEntree, prixUnitaire);
+        
+        produitRepository.save(produit);
+    }
     
     
     
