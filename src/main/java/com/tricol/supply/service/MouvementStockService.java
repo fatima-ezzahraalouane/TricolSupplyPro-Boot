@@ -31,6 +31,12 @@ public class MouvementStockService {
         return mouvementMapper.toDTOList(mouvements);
     }
     
-    
+    public List<MouvementStockDTO> findByCommande(Long commandeId) {
+        CommandeFournisseur commande = commandeRepository.findById(commandeId)
+            .orElseThrow(() -> new ResourceNotFoundException("Commande", commandeId));
+        
+        List<MouvementStock> mouvements = mouvementStockRepository.findByCommandeFournisseur(commande);
+        return mouvementMapper.toDTOList(mouvements);
+    }
 }
 
