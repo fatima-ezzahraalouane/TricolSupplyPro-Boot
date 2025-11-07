@@ -1,9 +1,5 @@
 databaseChangeLog:
   - include:
-      file: db/changelog/migrations/001-create-enum-statut-commande.yaml
-  - include:
-      file: db/changelog/migrations/002-create-enum-type-mouvement.yaml
-  - include:
       file: db/changelog/migrations/003-create-fournisseurs-table.yaml
   - include:
       file: db/changelog/migrations/004-create-fournisseurs-indexes.yaml
