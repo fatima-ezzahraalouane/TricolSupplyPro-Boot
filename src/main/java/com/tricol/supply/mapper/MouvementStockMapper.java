@@ -10,6 +10,11 @@ import java.util.List;
 @Mapper(componentModel = "spring")
 public interface MouvementStockMapper {
     
+    @Mapping(target = "produitId", source = "produit.id")
+    @Mapping(target = "nomProduit", source = "produit.nom")
+    @Mapping(target = "commandeFournisseurId", expression = "java(mouvement.getCommandeFournisseur() != null ? mouvement.getCommandeFournisseur().getId() : null)")
+    MouvementStockDTO toDTO(MouvementStock mouvement);
+    
     
 }
 
