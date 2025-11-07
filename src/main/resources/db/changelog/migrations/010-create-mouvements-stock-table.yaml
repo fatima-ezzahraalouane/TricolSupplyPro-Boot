@@ -19,7 +19,7 @@ databaseChangeLog:
                     nullable: false
               - column:
                   name: type_mouvement
-                  type: type_mouvement
+                  type: VARCHAR(50)
                   constraints:
                     nullable: false
               - column:
