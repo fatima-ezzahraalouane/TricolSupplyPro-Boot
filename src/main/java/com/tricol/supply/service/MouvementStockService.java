@@ -23,6 +23,14 @@ public class MouvementStockService {
     private final CommandeFournisseurRepository commandeRepository;
     private final MouvementStockMapper mouvementMapper;
     
+    public List<MouvementStockDTO> findByProduit(Long produitId) {
+        Produit produit = produitRepository.findById(produitId)
+            .orElseThrow(() -> new ResourceNotFoundException("Produit", produitId));
+        
+        List<MouvementStock> mouvements = mouvementStockRepository.findByProduit(produit);
+        return mouvementMapper.toDTOList(mouvements);
+    }
+    
     
 }
 
