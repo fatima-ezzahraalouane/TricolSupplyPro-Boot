@@ -29,6 +29,29 @@ public class StockService {
     }
     
     
-    
+    // calcule le cout unitaire moyen pondere (CUMP)
+    private void calculerCUMP(Produit produit, Integer quantiteEntree, BigDecimal prixUnitaire) {
+        // stock avant l'entree
+        int stockAncien = produit.getStockActuel() - quantiteEntree;
+        BigDecimal coutAncien = produit.getCoutUnitaireMoyen();
+        
+        // valeur stock ancien
+        BigDecimal valeurAncienne = coutAncien.multiply(BigDecimal.valueOf(stockAncien));
+        
+        // valeur entree
+        BigDecimal valeurEntree = prixUnitaire.multiply(BigDecimal.valueOf(quantiteEntree));
+        
+        // nouvelle valeur totale
+        BigDecimal valeurTotale = valeurAncienne.add(valeurEntree);
+        
+        // nouveau stock
+        int stockTotal = produit.getStockActuel();
+        
+        // nouveau CUMP
+        if (stockTotal > 0) {
+            BigDecimal cump = valeurTotale.divide(BigDecimal.valueOf(stockTotal), 2, RoundingMode.HALF_UP);
+            produit.setCoutUnitaireMoyen(cump);
+        }
+    }
 }
 
