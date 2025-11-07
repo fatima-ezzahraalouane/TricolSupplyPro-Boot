@@ -1,9 +1,0 @@
-databaseChangeLog:
-  - changeSet:
-      id: create-enum-statut-commande
-      author: TricolSupplyPro
-      changes:
-        - sql:
-            sql: |
-              CREATE TYPE statut_commande AS ENUM ('EN_ATTENTE', 'VALIDEE', 'LIVREE', 'ANNULEE');
-
