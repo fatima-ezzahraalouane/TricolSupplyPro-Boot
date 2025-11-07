@@ -18,6 +18,11 @@ import java.util.List;
 @RequiredArgsConstructor
 public class MouvementStockService {
     
+    private final MouvementStockRepository mouvementStockRepository;
+    private final ProduitRepository produitRepository;
+    private final CommandeFournisseurRepository commandeRepository;
+    private final MouvementStockMapper mouvementMapper;
+    
     
 }
 
