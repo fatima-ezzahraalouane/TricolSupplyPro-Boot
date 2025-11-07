@@ -15,6 +15,6 @@ public interface MouvementStockMapper {
     @Mapping(target = "commandeFournisseurId", expression = "java(mouvement.getCommandeFournisseur() != null ? mouvement.getCommandeFournisseur().getId() : null)")
     MouvementStockDTO toDTO(MouvementStock mouvement);
     
-    
+    List<MouvementStockDTO> toDTOList(List<MouvementStock> mouvements);
 }
 
