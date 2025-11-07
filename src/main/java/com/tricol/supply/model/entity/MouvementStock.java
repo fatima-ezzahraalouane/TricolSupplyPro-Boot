@@ -16,6 +16,23 @@ import java.time.LocalDateTime;
 @Builder
 public class MouvementStock {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @Column(name = "date_mouvement", nullable = false)
+    private LocalDateTime dateMouvement;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "type_mouvement", nullable = false)
+    private TypeMouvement typeMouvement;
+
+    @Column(nullable = false)
+    private Integer quantite;
+
+    @Column(name = "prix_unitaire", nullable = false, precision = 19, scale = 2)
+    private BigDecimal prixUnitaire;
+
     
 }
 
