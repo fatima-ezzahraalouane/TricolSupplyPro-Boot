@@ -1,0 +1,198 @@
+{
+  "info": {
+    "name": "TricolSupplyPro API",
+    "description": "Collection complète des endpoints de l'API TricolSupplyPro",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:8080/api/v1"
+    }
+  ],
+  "item": [
+    {
+      "name": "Fournisseurs",
+      "item": [
+        {
+          "name": "Liste des fournisseurs",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/fournisseurs"
+          }
+        },
+        {
+          "name": "Détails d'un fournisseur",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/fournisseurs/1"
+          }
+        },
+        {
+          "name": "Créer un fournisseur",
+          "request": {
+            "method": "POST",
+            "header": [{"key": "Content-Type", "value": "application/json"}],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"societe\": \"Fournisseur Test SARL\",\n  \"adresse\": \"123 Rue Test\",\n  \"contact\": \"Mohamed Alami\",\n  \"email\": \"contact@test.com\",\n  \"telephone\": \"0612345678\",\n  \"ville\": \"Casablanca\",\n  \"ice\": \"001234567890001\"\n}"
+            },
+            "url": "{{baseUrl}}/fournisseurs"
+          }
+        },
+        {
+          "name": "Modifier un fournisseur",
+          "request": {
+            "method": "PUT",
+            "header": [{"key": "Content-Type", "value": "application/json"}],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"societe\": \"Fournisseur Modifié SARL\",\n  \"adresse\": \"456 Avenue Modifiée\",\n  \"contact\": \"Fatima Zahra\",\n  \"email\": \"modifie@test.com\",\n  \"telephone\": \"0698765432\",\n  \"ville\": \"Rabat\",\n  \"ice\": \"001234567890002\"\n}"
+            },
+            "url": "{{baseUrl}}/fournisseurs/1"
+          }
+        },
+        {
+          "name": "Supprimer un fournisseur",
+          "request": {
+            "method": "DELETE",
+            "url": "{{baseUrl}}/fournisseurs/1"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Produits",
+      "item": [
+        {
+          "name": "Liste des produits",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/produits"
+          }
+        },
+        {
+          "name": "Détails d'un produit",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/produits/1"
+          }
+        },
+        {
+          "name": "Créer un produit",
+          "request": {
+            "method": "POST",
+            "header": [{"key": "Content-Type", "value": "application/json"}],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nom\": \"Ordinateur Portable HP\",\n  \"description\": \"Ordinateur portable HP 15 pouces\",\n  \"prixUnitaire\": 5500.00,\n  \"categorie\": \"Informatique\",\n  \"stockActuel\": 50,\n  \"coutUnitaireMoyen\": 5200.00\n}"
+            },
+            "url": "{{baseUrl}}/produits"
+          }
+        },
+        {
+          "name": "Modifier un produit",
+          "request": {
+            "method": "PUT",
+            "header": [{"key": "Content-Type", "value": "application/json"}],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nom\": \"Ordinateur Portable Dell\",\n  \"description\": \"Ordinateur portable Dell 17 pouces\",\n  \"prixUnitaire\": 6500.00,\n  \"categorie\": \"Informatique\",\n  \"stockActuel\": 75,\n  \"coutUnitaireMoyen\": 6200.00\n}"
+            },
+            "url": "{{baseUrl}}/produits/1"
+          }
+        },
+        {
+          "name": "Supprimer un produit",
+          "request": {
+            "method": "DELETE",
+            "url": "{{baseUrl}}/produits/1"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Commandes Fournisseurs",
+      "item": [
+        {
+          "name": "Liste des commandes",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/commandes"
+          }
+        },
+        {
+          "name": "Détails d'une commande",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/commandes/1"
+          }
+        },
+        {
+          "name": "Commandes d'un fournisseur",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/commandes/fournisseur/1"
+          }
+        },
+        {
+          "name": "Créer une commande",
+          "request": {
+            "method": "POST",
+            "header": [{"key": "Content-Type", "value": "application/json"}],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"fournisseurId\": 1,\n  \"dateCommande\": \"2025-11-07T20:00:00\",\n  \"statut\": \"EN_ATTENTE\",\n  \"produits\": [\n    {\n      \"produitId\": 1,\n      \"quantite\": 50,\n      \"prixUnitaireCommande\": 5200.00\n    }\n  ]\n}"
+            },
+            "url": "{{baseUrl}}/commandes"
+          }
+        },
+        {
+          "name": "Modifier une commande",
+          "request": {
+            "method": "PUT",
+            "header": [{"key": "Content-Type", "value": "application/json"}],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"fournisseurId\": 1,\n  \"dateCommande\": \"2025-11-07T20:00:00\",\n  \"statut\": \"EN_ATTENTE\",\n  \"produits\": [\n    {\n      \"produitId\": 1,\n      \"quantite\": 75,\n      \"prixUnitaireCommande\": 5200.00\n    }\n  ]\n}"
+            },
+            "url": "{{baseUrl}}/commandes/1"
+          }
+        },
+        {
+          "name": "Changer statut commande",
+          "request": {
+            "method": "PATCH",
+            "url": "{{baseUrl}}/commandes/1/statut?statut=VALIDEE"
+          }
+        },
+        {
+          "name": "Supprimer une commande",
+          "request": {
+            "method": "DELETE",
+            "url": "{{baseUrl}}/commandes/1"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Mouvements de Stock",
+      "item": [
+        {
+          "name": "Mouvements d'un produit",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/mouvements/produit/1"
+          }
+        },
+        {
+          "name": "Mouvements d'une commande",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/mouvements/commande/1"
+          }
+        }
+      ]
+    }
+  ]
+}
