@@ -202,5 +202,26 @@ public class CommandeFournisseurService {
             mouvementStockRepository.save(mouvement);
         }
     }
+
+    private void restaurerStockPourAnnulation(CommandeFournisseur commande) {
+        // remettre le stock qui avait été reserve lors de la creation de la commande
+        for (CommandeProduit cp : commande.getCommandeProduits()) {
+            Produit produit = cp.getProduit();
+            produit.setStockActuel(produit.getStockActuel() + cp.getQuantite());
+            produitRepository.save(produit);
+            
+            // creer un mouvement AJUSTEMENT pour tracer cette restauration
+            MouvementStock mouvement = MouvementStock.builder()
+                .dateMouvement(LocalDateTime.now())
+                .typeMouvement(TypeMouvement.AJUSTEMENT)
+                .quantite(cp.getQuantite())
+                .prixUnitaire(cp.getPrixUnitaireCommande())
+                .produit(produit)
+                .commandeFournisseur(commande)
+                .build();
+            
+            mouvementStockRepository.save(mouvement);
+        }
+    }
    }
 
