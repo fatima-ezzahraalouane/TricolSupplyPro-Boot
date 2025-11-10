@@ -164,5 +164,28 @@ public class CommandeFournisseurService {
         
         commandeRepository.deleteById(id);
     }
+
+    @Transactional
+    public CommandeFournisseurDetailDTO changerStatut(Long id, StatutCommande nouveauStatut) {
+        CommandeFournisseur commande = commandeRepository.findById(id)
+            .orElseThrow(() -> new ResourceNotFoundException("Commande", id));
+        
+        StatutCommande ancienStatut = commande.getStatut();
+        
+        // gerer automatiquement les mouvements de stock lors de la livraison
+        if (nouveauStatut == StatutCommande.LIVREE && ancienStatut != StatutCommande.LIVREE) {
+            creerMouvementsStockPourLivraison(commande);
+        }
+        
+        // si la commande est annulee, remettre le stock (annuler la reservation)
+        if (nouveauStatut == StatutCommande.ANNULEE && ancienStatut != StatutCommande.ANNULEE && ancienStatut != StatutCommande.LIVREE) {
+            restaurerStockPourAnnulation(commande);
+        }
+        
+        commande.setStatut(nouveauStatut);
+        CommandeFournisseur updated = commandeRepository.save(commande);
+        
+        return commandeMapper.toDetailDTO(updated);
+    }
    }
 
