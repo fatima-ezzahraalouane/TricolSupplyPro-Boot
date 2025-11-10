@@ -604,9 +604,18 @@ Une collection Postman complète est disponible pour tester tous les endpoints d
 **📋 Valeurs des Enums** :
 - Consultez le fichier `API_ENUMS.md` pour la liste complète des valeurs acceptées pour `StatutCommande` et `TypeMouvement`
 
+**📦 Logique des Mouvements de Stock** :
+- Consultez le fichier `LOGIQUE_MOUVEMENTS_STOCK.md` pour comprendre le workflow complet des mouvements de stock
+
 ---
 
 ## 📚 Documentation complémentaire
+
+### 📄 Documentation projet
+
+- 📦 **[LOGIQUE_MOUVEMENTS_STOCK.md](LOGIQUE_MOUVEMENTS_STOCK.md)** - Workflow détaillé des mouvements de stock
+- 📋 **[API_ENUMS.md](API_ENUMS.md)** - Liste des valeurs d'énumérations
+- 📊 **[Diagram/classDiagram.mmd](Diagram/classDiagram.mmd)** - Diagramme de classes UML
 
 ### 🔗 Ressources utiles
 
@@ -615,13 +624,6 @@ Une collection Postman complète est disponible pour tester tous les endpoints d
 - 📖 [MapStruct Documentation](https://mapstruct.org/)
 - 📖 [Liquibase Documentation](https://docs.liquibase.com/)
 - 📖 [Swagger/OpenAPI](https://swagger.io/specification/)
-
-### 📊 Diagramme de classes
-
-Le diagramme de classes complet est disponible dans :
-```
-Diagram/classDiagram.mmd
-```
 
 ---
 
