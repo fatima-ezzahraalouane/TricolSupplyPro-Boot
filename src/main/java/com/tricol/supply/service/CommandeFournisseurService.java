@@ -187,5 +187,20 @@ public class CommandeFournisseurService {
         
         return commandeMapper.toDetailDTO(updated);
     }
+
+    private void creerMouvementsStockPourLivraison(CommandeFournisseur commande) {
+        for (CommandeProduit cp : commande.getCommandeProduits()) {
+            MouvementStock mouvement = MouvementStock.builder()
+                .dateMouvement(LocalDateTime.now())
+                .typeMouvement(TypeMouvement.SORTIE) // SORTIE car c'est une livraison au fournisseur (vente)
+                .quantite(cp.getQuantite())
+                .prixUnitaire(cp.getPrixUnitaireCommande())
+                .produit(cp.getProduit())
+                .commandeFournisseur(commande)
+                .build();
+            
+            mouvementStockRepository.save(mouvement);
+        }
+    }
    }
 
