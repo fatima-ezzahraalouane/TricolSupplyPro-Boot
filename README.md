@@ -615,7 +615,7 @@ Une collection Postman complète est disponible pour tester tous les endpoints d
 
 - 📦 **[LOGIQUE_MOUVEMENTS_STOCK.md](LOGIQUE_MOUVEMENTS_STOCK.md)** - Workflow détaillé des mouvements de stock
 - 📋 **[API_ENUMS.md](API_ENUMS.md)** - Liste des valeurs d'énumérations
-- 📊 **[Diagram/classDiagram.mmd](Diagram/classDiagram.mmd)** - Diagramme de classes UML
+- 📊 **[Diagram/classDiagram.png](Diagram/classDiagram.png)** - Diagramme de classes UML
 
 ### 🔗 Ressources utiles
 
