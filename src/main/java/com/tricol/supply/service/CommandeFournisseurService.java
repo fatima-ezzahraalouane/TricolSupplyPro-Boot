@@ -65,6 +65,19 @@ public class CommandeFournisseurService {
             Produit produit = produitRepository.findById(produitDTO.getProduitId())
                 .orElseThrow(() -> new ResourceNotFoundException("Produit", produitDTO.getProduitId()));
             
+            // verifier qu'il y a assez de stock disponible
+            if (produit.getStockActuel() < produitDTO.getQuantite()) {
+                throw new IllegalArgumentException(
+                    "Stock insuffisant pour le produit " + produit.getNom() + 
+                    ". Disponible: " + produit.getStockActuel() + 
+                    ", Demandé: " + produitDTO.getQuantite()
+                );
+            }
+            
+            // diminuer le stock lors de la création de la commande (reservation)
+            produit.setStockActuel(produit.getStockActuel() - produitDTO.getQuantite());
+            produitRepository.save(produit);
+            
             CommandeProduit cp = CommandeProduit.builder()
                 .commande(commande)
                 .produit(produit)
@@ -90,110 +103,5 @@ public class CommandeFournisseurService {
         return commandeMapper.toDetailDTO(commande);
     }
     
-    @Transactional
-    public CommandeFournisseurDetailDTO update(Long id, CommandeFournisseurDTO dto) {
-        CommandeFournisseur existing = commandeRepository.findById(id)
-            .orElseThrow(() -> new ResourceNotFoundException("Commande", id));
-        
-        // verifier qu'on ne peut modifier que les commandes EN_ATTENTE
-        if (existing.getStatut() != StatutCommande.EN_ATTENTE) {
-            throw new IllegalArgumentException("Seules les commandes en attente peuvent être modifiées");
-        }
-        
-        // verifier le fournisseur
-        Fournisseur fournisseur = fournisseurRepository.findById(dto.getFournisseurId())
-            .orElseThrow(() -> new ResourceNotFoundException("Fournisseur", dto.getFournisseurId()));
-        
-        existing.setFournisseur(fournisseur);
-        existing.setStatut(dto.getStatut());
-        
-        // supprimer les anciens produits
-        commandeProduitRepository.deleteAll(existing.getCommandeProduits());
-        
-        // ajouter les nouveaux produits
-        List<CommandeProduit> commandeProduits = new ArrayList<>();
-        BigDecimal montantTotal = BigDecimal.ZERO;
-        
-        for (ProduitCommandeDTO produitDTO : dto.getProduits()) {
-            Produit produit = produitRepository.findById(produitDTO.getProduitId())
-                .orElseThrow(() -> new ResourceNotFoundException("Produit", produitDTO.getProduitId()));
-            
-            CommandeProduit cp = CommandeProduit.builder()
-                .commande(existing)
-                .produit(produit)
-                .quantite(produitDTO.getQuantite())
-                .prixUnitaireCommande(produitDTO.getPrixUnitaireCommande())
-                .build();
-            
-            commandeProduits.add(cp);
-            
-            BigDecimal montantLigne = produitDTO.getPrixUnitaireCommande()
-                .multiply(BigDecimal.valueOf(produitDTO.getQuantite()));
-            montantTotal = montantTotal.add(montantLigne);
-        }
-        
-        commandeProduitRepository.saveAll(commandeProduits);
-        existing.setMontantTotal(montantTotal);
-        
-        CommandeFournisseur updated = commandeRepository.save(existing);
-        return commandeMapper.toDetailDTO(updated);
-    }
-    
-    @Transactional
-    public void delete(Long id) {
-        CommandeFournisseur commande = commandeRepository.findById(id)
-            .orElseThrow(() -> new ResourceNotFoundException("Commande", id));
-        
-        // verifier qu'on ne peut supprimer que les commandes EN_ATTENTE ou ANNULEES
-        if (commande.getStatut() != StatutCommande.EN_ATTENTE && commande.getStatut() != StatutCommande.ANNULEE) {
-            throw new IllegalArgumentException("Seules les commandes en attente ou annulées peuvent être supprimées");
-        }
-        
-        commandeRepository.deleteById(id);
-    }
-    
-    @Transactional
-    public CommandeFournisseurDetailDTO changerStatut(Long id, StatutCommande nouveauStatut) {
-        CommandeFournisseur commande = commandeRepository.findById(id)
-            .orElseThrow(() -> new ResourceNotFoundException("Commande", id));
-        
-        // gerer automatiquement les mouvements de stock lors de la livraison
-        if (nouveauStatut == StatutCommande.LIVREE && commande.getStatut() != StatutCommande.LIVREE) {
-            creerMouvementsStockPourLivraison(commande);
-        }
-        
-        commande.setStatut(nouveauStatut);
-        CommandeFournisseur updated = commandeRepository.save(commande);
-        
-        return commandeMapper.toDetailDTO(updated);
-    }
-    
-    private void creerMouvementsStockPourLivraison(CommandeFournisseur commande) {
-        for (CommandeProduit cp : commande.getCommandeProduits()) {
-            MouvementStock mouvement = MouvementStock.builder()
-                .dateMouvement(LocalDateTime.now())
-                .typeMouvement(TypeMouvement.ENTREE)
-                .quantite(cp.getQuantite())
-                .prixUnitaire(cp.getPrixUnitaireCommande())
-                .produit(cp.getProduit())
-                .commandeFournisseur(commande)
-                .build();
-            
-            mouvement = mouvementStockRepository.save(mouvement);
-            
-            // mettre a jour le stock via le service
-            stockService.miseAJourStock(cp.getProduit(), cp.getQuantite(), cp.getPrixUnitaireCommande());
-        }
-    }
-    
-    public List<CommandeFournisseurDTO> findByFournisseur(Long fournisseurId) {
-        Fournisseur fournisseur = fournisseurRepository.findById(fournisseurId)
-            .orElseThrow(() -> new ResourceNotFoundException("Fournisseur", fournisseurId));
-        
-        List<CommandeFournisseur> commandes = commandeRepository.findByFournisseur(fournisseur);
-        return commandes.stream()
-            .map(commandeMapper::toDTO)
-            .toList();
-    }
-}
+   }
 
