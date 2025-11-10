@@ -57,7 +57,41 @@ public class ProduitService {
         return produitMapper.toDTO(saved);
     }
     
- 
+    @Transactional
+    public ProduitDTO update(Long id, ProduitDTO dto) {
+        Produit existing = produitRepository.findById(id)
+            .orElseThrow(() -> new ResourceNotFoundException("Produit", id));
+        
+        // sauvegarder l'ancien stock pour detecter les modifications manuelles
+        Integer ancienStock = existing.getStockActuel();
+        
+        existing.setNom(dto.getNom());
+        existing.setDescription(dto.getDescription());
+        existing.setPrixUnitaire(dto.getPrixUnitaire());
+        existing.setCategorie(dto.getCategorie());
+        
+        // si le stockActuel a été modifié manuellement, creer un mouvement AJUSTEMENT
+        if (dto.getStockActuel() != null && !dto.getStockActuel().equals(ancienStock)) {
+            int difference = dto.getStockActuel() - ancienStock;
+            
+            existing.setStockActuel(dto.getStockActuel());
+            
+            MouvementStock mouvement = MouvementStock.builder()
+                .dateMouvement(LocalDateTime.now())
+                .typeMouvement(TypeMouvement.AJUSTEMENT)
+                .quantite(Math.abs(difference))
+                .prixUnitaire(existing.getPrixUnitaire())
+                .produit(existing)
+                .commandeFournisseur(null)
+                .build();
+            
+            mouvementStockRepository.save(mouvement);
+        }
+        
+        Produit updated = produitRepository.save(existing);
+        return produitMapper.toDTO(updated);
+    }
+    
     @Transactional
     public void delete(Long id) {
         if (!produitRepository.existsById(id)) {
