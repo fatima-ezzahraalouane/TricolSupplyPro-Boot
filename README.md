@@ -426,8 +426,6 @@ Les migrations de base de données sont gérées par **Liquibase** :
 src/main/resources/db/changelog/
 ├── db.changelog-master.yaml       # Fichier principal
 └── migrations/                    # Dossier des migrations
-    ├── 001-create-enum-statut-commande.yaml
-    ├── 002-create-enum-type-mouvement.yaml
     ├── 003-create-fournisseurs-table.yaml
     ├── 004-create-fournisseurs-indexes.yaml
     ├── 005-create-produits-table.yaml
