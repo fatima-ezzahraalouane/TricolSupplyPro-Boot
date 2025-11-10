@@ -28,7 +28,6 @@ public class CommandeFournisseurService {
     private final CommandeProduitRepository commandeProduitRepository;
     private final MouvementStockRepository mouvementStockRepository;
     private final CommandeFournisseurMapper commandeMapper;
-    private final StockService stockService;
     
     public Page<CommandeFournisseurDTO> findAll(Pageable pageable) {
         return commandeRepository.findAll(pageable)
@@ -233,5 +232,5 @@ public class CommandeFournisseurService {
             .map(commandeMapper::toDTO)
             .toList();
     }
-   }
+}
 
