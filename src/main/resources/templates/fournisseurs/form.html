@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="fr" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title th:text="${pageTitle}">Fournisseur</title>
+    <link rel="stylesheet" th:href="@{/css/main.css}">
+</head>
+<body>
+<header class="topbar">
+    <div class="container">
+        <h1 th:text="${pageTitle}">Fournisseur</h1>
+        <nav>
+            <a th:href="@{/ui}">Accueil</a>
+            <a class="active" th:href="@{/ui/fournisseurs}">Fournisseurs</a>
+            <a th:href="@{/ui/produits}">Produits</a>
+            <a th:href="@{/ui/commandes}">Commandes</a>
+        </nav>
+    </div>
+</header>
+
+<main class="container">
+    <div class="card">
+        <form th:action="${isNew} ? @{/ui/fournisseurs} : @{|/ui/fournisseurs/${fournisseur.id}/mise-a-jour|}"
+              th:object="${fournisseur}" method="post" class="form-grid">
+
+            <div class="form-field">
+                <label for="societe">Raison sociale *</label>
+                <input id="societe" type="text" th:field="*{societe}" required>
+                <div class="error" th:if="${#fields.hasErrors('societe')}" th:errors="*{societe}"></div>
+            </div>
+
+            <div class="form-field">
+                <label for="contact">Contact</label>
+                <input id="contact" type="text" th:field="*{contact}">
+            </div>
+
+            <div class="form-field">
+                <label for="email">Email</label>
+                <input id="email" type="email" th:field="*{email}">
+                <div class="error" th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></div>
+            </div>
+
+            <div class="form-field">
+                <label for="telephone">Téléphone</label>
+                <input id="telephone" type="text" th:field="*{telephone}">
+            </div>
+
+            <div class="form-field">
+                <label for="adresse">Adresse</label>
+                <input id="adresse" type="text" th:field="*{adresse}">
+            </div>
+
+            <div class="form-field">
+                <label for="ville">Ville</label>
+                <input id="ville" type="text" th:field="*{ville}">
+            </div>
+
+            <div class="form-field">
+                <label for="ice">ICE</label>
+                <input id="ice" type="text" th:field="*{ice}">
+            </div>
+
+            <div class="form-actions">
+                <a class="btn" th:href="@{/ui/fournisseurs}">Annuler</a>
+                <button class="btn primary" type="submit"
+                        th:text="${isNew} ? 'Créer' : 'Enregistrer'">Enregistrer</button>
+            </div>
+        </form>
+    </div>
+</main>
+</body>
+</html>
+
+

@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="fr" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title th:text="${pageTitle} ?: 'Détail commande'">Détail commande</title>
+    <link rel="stylesheet" th:href="@{/css/main.css}">
+</head>
+<body>
+<header class="topbar">
+    <div class="container">
+        <h1>Détail d'une commande</h1>
+        <nav>
+            <a th:href="@{/ui}">Accueil</a>
+            <a th:href="@{/ui/fournisseurs}">Fournisseurs</a>
+            <a th:href="@{/ui/produits}">Produits</a>
+            <a class="active" th:href="@{/ui/commandes}">Commandes</a>
+        </nav>
+    </div>
+</header>
+
+<main class="container" th:if="${commande != null}">
+    <div class="actions-bar">
+        <a class="btn" th:href="@{/ui/commandes}">&larr; Retour</a>
+        <a class="btn primary" th:href="@{|/ui/commandes/${commande.id}/edition|}">Modifier</a>
+    </div>
+
+    <section class="card detail-card">
+        <div class="detail-header">
+            <div>
+                <h2>Commande <span th:text="${commande.id}">ID</span></h2>
+                <p>Fournisseur :
+                    <strong th:text="${commande.fournisseur != null ? commande.fournisseur.societe : '-'}">Fournisseur</strong>
+                </p>
+            </div>
+            <span class="badge" th:text="${commande.statut}">STATUT</span>
+        </div>
+
+        <dl class="detail-grid">
+            <div>
+                <dt>Date de commande</dt>
+                <dd th:text="${commande.dateCommande != null ? #temporals.format(commande.dateCommande, 'dd/MM/yyyy HH:mm') : '-'}">-</dd>
+            </div>
+            <div>
+                <dt>Montant total</dt>
+                <dd th:text="${commande.montantTotal} ?: '0.00'">0.00</dd>
+            </div>
+            <div>
+                <dt>Créée le</dt>
+                <dd th:text="${commande.createdAt != null ? #temporals.format(commande.createdAt, 'dd/MM/yyyy HH:mm') : '-'}">-</dd>
+            </div>
+            <div>
+                <dt>Mise à jour le</dt>
+                <dd th:text="${commande.updatedAt != null ? #temporals.format(commande.updatedAt, 'dd/MM/yyyy HH:mm') : '-'}">-</dd>
+            </div>
+        </dl>
+
+        <h3>Produits</h3>
+        <table>
+            <thead>
+            <tr>
+                <th>Produit</th>
+                <th>Quantité</th>
+                <th>Prix unitaire (MAD)</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:if="${#lists.isEmpty(commande.produits)}">
+                <td colspan="3" class="empty-state">Aucun produit associé.</td>
+            </tr>
+            <tr th:each="ligne : ${commande.produits}">
+                <td th:text="${produitLibelles[ligne.produitId]} ?: ligne.produitId">Produit</td>
+                <td th:text="${ligne.quantite}">0</td>
+                <td th:text="${ligne.prixUnitaireCommande} ?: '0.00'">0.00</td>
+            </tr>
+            </tbody>
+        </table>
+    </section>
+</main>
+</body>
+</html>
+
+

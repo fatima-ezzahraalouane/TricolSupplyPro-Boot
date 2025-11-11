@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="fr" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title th:text="${pageTitle} ?: 'Produits'">Produits</title>
+    <link rel="stylesheet" th:href="@{/css/main.css}">
+</head>
+<body>
+<header class="topbar">
+    <div class="container">
+        <h1>Produits</h1>
+        <nav>
+            <a th:href="@{/ui}">Accueil</a>
+            <a th:href="@{/ui/fournisseurs}">Fournisseurs</a>
+            <a class="active" th:href="@{/ui/produits}">Produits</a>
+            <a th:href="@{/ui/commandes}">Commandes</a>
+        </nav>
+    </div>
+</header>
+
+<main class="container">
+    <div th:if="${successMessage}" class="alert success" th:text="${successMessage}"></div>
+
+    <div class="actions-bar">
+        <a class="btn primary" th:href="@{/ui/produits/nouveau}">Ajouter un produit</a>
+    </div>
+
+    <div class="card">
+        <table>
+            <thead>
+            <tr>
+                <th>Nom</th>
+                <th>Catégorie</th>
+                <th>Prix unitaire</th>
+                <th>Stock actuel</th>
+                <th>Description</th>
+                <th>Actions</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:if="${#lists.isEmpty(produits.content)}">
+                <td colspan="6" class="empty-state">Aucun produit pour le moment.</td>
+            </tr>
+            <tr th:each="produit : ${produits.content}">
+                <td th:text="${produit.nom}">Nom produit</td>
+                <td th:text="${produit.categorie} ?: '-'">Catégorie</td>
+                <td th:text="${produit.prixUnitaire} ?: '0.00'}">0.00</td>
+                <td th:text="${produit.stockActuel} ?: 0">0</td>
+                <td th:text="${produit.description} ?: '-'}">Description</td>
+                <td class="actions">
+                    <a class="btn secondary" th:href="@{|/ui/produits/${produit.id}/edition|}">Modifier</a>
+                    <form th:action="@{|/ui/produits/${produit.id}/suppression|}" method="post"
+                          onsubmit="return confirm('Confirmer la suppression de ce produit ?');">
+                        <button type="submit" class="btn danger">Supprimer</button>
+                    </form>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="pagination" th:if="${totalPages > 1}">
+        <a class="btn"
+           th:classappend="${currentPage == 0} ? ' disabled'"
+           th:href="@{|/ui/produits?page=${currentPage - 1}&size=${pageSize}|}">Précédent</a>
+
+        <span>Page <span th:text="${currentPage + 1}">1</span> / <span th:text="${totalPages}">1</span></span>
+
+        <a class="btn"
+           th:classappend="${currentPage + 1 >= totalPages} ? ' disabled'"
+           th:href="@{|/ui/produits?page=${currentPage + 1}&size=${pageSize}|}">Suivant</a>
+    </div>
+</main>
+</body>
+</html>
+
+

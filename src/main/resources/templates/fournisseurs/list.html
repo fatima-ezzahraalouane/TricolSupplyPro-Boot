@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="fr" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title th:text="${pageTitle} ?: 'Fournisseurs'">Fournisseurs</title>
+    <link rel="stylesheet" th:href="@{/css/main.css}">
+</head>
+<body>
+<header class="topbar">
+    <div class="container">
+        <h1>Fournisseurs</h1>
+        <nav>
+            <a th:href="@{/ui}">Accueil</a>
+            <a class="active" th:href="@{/ui/fournisseurs}">Fournisseurs</a>
+            <a th:href="@{/ui/produits}">Produits</a>
+            <a th:href="@{/ui/commandes}">Commandes</a>
+        </nav>
+    </div>
+</header>
+
+<main class="container">
+    <div th:if="${successMessage}" class="alert success" th:text="${successMessage}"></div>
+
+    <div class="actions-bar">
+        <a class="btn primary" th:href="@{/ui/fournisseurs/nouveau}">Ajouter un fournisseur</a>
+    </div>
+
+    <div class="card">
+        <table>
+            <thead>
+            <tr>
+                <th>Raison sociale</th>
+                <th>Contact</th>
+                <th>Email</th>
+                <th>Téléphone</th>
+                <th>Ville</th>
+                <th>Actions</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:if="${#lists.isEmpty(fournisseurs.content)}">
+                <td colspan="6" class="empty-state">Aucun fournisseur pour le moment.</td>
+            </tr>
+            <tr th:each="fournisseur : ${fournisseurs.content}">
+                <td th:text="${fournisseur.societe}">Fournisseur</td>
+                <td th:text="${fournisseur.contact} ?: '-'">Contact</td>
+                <td th:text="${fournisseur.email} ?: '-'">Email</td>
+                <td th:text="${fournisseur.telephone} ?: '-'">Téléphone</td>
+                <td th:text="${fournisseur.ville} ?: '-'">Ville</td>
+                <td class="actions">
+                    <a class="btn secondary" th:href="@{|/ui/fournisseurs/${fournisseur.id}/edition|}">Modifier</a>
+                    <form th:action="@{|/ui/fournisseurs/${fournisseur.id}/suppression|}" method="post"
+                          onsubmit="return confirm('Confirmer la suppression ?');">
+                        <button type="submit" class="btn danger">Supprimer</button>
+                    </form>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="pagination" th:if="${totalPages > 1}">
+        <a class="btn"
+           th:classappend="${currentPage == 0} ? ' disabled'"
+           th:href="@{|/ui/fournisseurs?page=${currentPage - 1}&size=${pageSize}|}">Précédent</a>
+
+        <span>Page <span th:text="${currentPage + 1}">1</span> / <span th:text="${totalPages}">1</span></span>
+
+        <a class="btn"
+           th:classappend="${currentPage + 1 >= totalPages} ? ' disabled'"
+           th:href="@{|/ui/fournisseurs?page=${currentPage + 1}&size=${pageSize}|}">Suivant</a>
+    </div>
+</main>
+</body>
+</html>
+
+

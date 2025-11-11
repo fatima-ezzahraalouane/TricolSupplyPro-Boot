@@ -1,0 +1,348 @@
+:root {
+    color-scheme: light;
+    --primary-color: #0065ff;
+    --secondary-color: #f0f4ff;
+    --danger-color: #d14343;
+    --success-color: #188038;
+    --border-color: #d7dce3;
+    --text-color: #1f2933;
+    --muted-color: #52606d;
+    --background-color: #f7f9fc;
+    --card-background: #ffffff;
+    --radius: 8px;
+    --spacing: 1rem;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    font-family: "Segoe UI", Helvetica, Arial, sans-serif;
+    background: var(--background-color);
+    color: var(--text-color);
+}
+
+a {
+    color: var(--primary-color);
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+.container {
+    width: min(1100px, 92%);
+    margin: 0 auto;
+    padding: var(--spacing) 0;
+}
+
+.topbar {
+    background: var(--card-background);
+    border-bottom: 1px solid var(--border-color);
+    box-shadow: 0 2px 8px rgba(15, 23, 42, 0.08);
+}
+
+.topbar h1 {
+    margin: 0;
+    font-size: 1.5rem;
+}
+
+.topbar nav {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+    flex-wrap: wrap;
+    margin-top: 0.5rem;
+}
+
+.topbar nav a {
+    padding: 0.35rem 0.65rem;
+    border-radius: var(--radius);
+    color: var(--muted-color);
+    transition: background 0.2s ease;
+}
+
+.topbar nav a:hover,
+.topbar nav a.active {
+    background: var(--secondary-color);
+    color: var(--primary-color);
+    text-decoration: none;
+}
+
+.card {
+    background: var(--card-background);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius);
+    padding: 1.5rem;
+    box-shadow: 0 4px 20px rgba(15, 23, 42, 0.05);
+    margin-bottom: 1.5rem;
+}
+
+.detail-card .detail-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    margin-bottom: 1rem;
+}
+
+.detail-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 1rem;
+    margin: 0;
+    padding: 0;
+}
+
+.detail-grid dt {
+    font-weight: 600;
+    color: var(--muted-color);
+}
+
+.detail-grid dd {
+    margin: 0.25rem 0 0 0;
+}
+
+.menu-grid {
+    list-style: none;
+    padding: 0;
+    margin: var(--spacing) 0 0 0;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 1rem;
+}
+
+.menu-grid .btn {
+    display: block;
+    text-align: center;
+}
+
+.btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    padding: 0.55rem 1.1rem;
+    border-radius: var(--radius);
+    border: 1px solid var(--border-color);
+    background: #fff;
+    color: var(--text-color);
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.btn:hover {
+    background: var(--secondary-color);
+    color: var(--primary-color);
+    text-decoration: none;
+}
+
+.btn.primary {
+    background: var(--primary-color);
+    border-color: var(--primary-color);
+    color: #fff;
+}
+
+.btn.primary:hover {
+    background: #004bcc;
+}
+
+.btn.secondary {
+    background: #fff;
+}
+
+.btn.danger {
+    background: var(--danger-color);
+    border-color: var(--danger-color);
+    color: #fff;
+}
+
+.btn.danger:hover {
+    background: #b73535;
+}
+
+.btn.disabled {
+    opacity: 0.5;
+    pointer-events: none;
+}
+
+.actions-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+    gap: 1rem;
+}
+
+.actions-bar form {
+    display: inline;
+}
+
+.actions {
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+}
+
+.actions form {
+    margin: 0;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.95rem;
+}
+
+table thead {
+    background: var(--secondary-color);
+    text-align: left;
+}
+
+table th,
+table td {
+    padding: 0.75rem;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.sub-table {
+    width: 100%;
+    margin-top: 1rem;
+}
+
+.form-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 1rem 1.5rem;
+}
+
+.form-field {
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+}
+
+.form-field.full-width {
+    grid-column: 1 / -1;
+}
+
+.form-field label {
+    font-weight: 600;
+}
+
+.form-field input,
+.form-field select,
+.form-field textarea {
+    padding: 0.55rem 0.65rem;
+    border-radius: var(--radius);
+    border: 1px solid var(--border-color);
+    font-size: 0.95rem;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    font-family: inherit;
+}
+
+.form-field input:focus,
+.form-field select:focus,
+.form-field textarea:focus {
+    border-color: var(--primary-color);
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(0, 101, 255, 0.1);
+}
+
+.form-actions {
+    grid-column: 1 / -1;
+    display: flex;
+    justify-content: flex-end;
+    gap: 0.75rem;
+    margin-top: 0.5rem;
+}
+
+.alert {
+    border-radius: var(--radius);
+    padding: 0.75rem 1rem;
+    margin-bottom: 1rem;
+    border: 1px solid transparent;
+}
+
+.alert.success {
+    background: rgba(24, 128, 56, 0.1);
+    color: var(--success-color);
+    border-color: rgba(24, 128, 56, 0.2);
+}
+
+.error {
+    color: var(--danger-color);
+    font-size: 0.85rem;
+}
+
+.help-text {
+    color: var(--muted-color);
+    font-size: 0.85rem;
+}
+
+.badge {
+    display: inline-block;
+    padding: 0.25rem 0.6rem;
+    background: var(--secondary-color);
+    color: var(--primary-color);
+    border-radius: 999px;
+    font-weight: 600;
+}
+
+.empty-state {
+    text-align: center;
+    color: var(--muted-color);
+    padding: 1.5rem 0.5rem;
+}
+
+.meta-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: grid;
+    gap: 0.5rem;
+}
+
+.pagination {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    justify-content: center;
+    margin: 1.5rem 0;
+}
+
+.footer {
+    margin-top: 2rem;
+    padding: 1.3rem 0;
+    border-top: 1px solid var(--border-color);
+    text-align: center;
+    color: var(--muted-color);
+}
+
+@media (max-width: 720px) {
+    .actions {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .form-actions {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .actions-bar {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    table th,
+    table td {
+        padding: 0.55rem;
+    }
+}
+
+

@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="fr" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title th:text="${pageTitle} ?: 'Tricol Supply Pro'">Tricol Supply Pro</title>
+    <link rel="stylesheet" th:href="@{/css/main.css}">
+</head>
+<body>
+<header class="topbar">
+    <div class="container">
+        <h1>Tricol Supply Pro</h1>
+        <nav>
+            <a th:href="@{/ui}">Accueil</a>
+            <a th:href="@{/ui/fournisseurs}">Fournisseurs</a>
+            <a th:href="@{/ui/produits}">Produits</a>
+            <a th:href="@{/ui/commandes}">Commandes fournisseurs</a>
+        </nav>
+    </div>
+</header>
+
+<main class="container">
+    <section class="card">
+        <h2>Tableau de bord</h2>
+        <p>
+            Bienvenue sur l’interface de gestion. Utilisez la navigation pour consulter,
+            ajouter ou modifier vos fournisseurs, produits et commandes fournisseurs.
+        </p>
+        <ul class="menu-grid">
+            <li><a class="btn primary" th:href="@{/ui/fournisseurs}">Gérer les fournisseurs</a></li>
+            <li><a class="btn primary" th:href="@{/ui/produits}">Gérer les produits</a></li>
+            <li><a class="btn primary" th:href="@{/ui/commandes}">Gérer les commandes</a></li>
+        </ul>
+    </section>
+</main>
+
+<footer class="footer">
+    <div class="container">
+        <span>&copy; <span th:text="${#temporals.format(#temporals.createNow(), 'yyyy')}">2025</span> Tricol Supply Pro</span>
+    </div>
+</footer>
+</body>
+</html>
+
+

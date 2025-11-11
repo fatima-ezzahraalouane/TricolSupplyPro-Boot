@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="fr" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title th:text="${pageTitle} ?: 'Commandes fournisseurs'">Commandes fournisseurs</title>
+    <link rel="stylesheet" th:href="@{/css/main.css}">
+</head>
+<body>
+<header class="topbar">
+    <div class="container">
+        <h1>Commandes fournisseurs</h1>
+        <nav>
+            <a th:href="@{/ui}">Accueil</a>
+            <a th:href="@{/ui/fournisseurs}">Fournisseurs</a>
+            <a th:href="@{/ui/produits}">Produits</a>
+            <a class="active" th:href="@{/ui/commandes}">Commandes</a>
+        </nav>
+    </div>
+</header>
+
+<main class="container">
+    <div th:if="${successMessage}" class="alert success" th:text="${successMessage}"></div>
+
+    <div class="actions-bar">
+        <a class="btn primary" th:href="@{/ui/commandes/nouvelle}">Créer une commande</a>
+    </div>
+
+    <div class="card">
+        <table>
+            <thead>
+            <tr>
+                <th>ID</th>
+                <th>Date</th>
+                <th>Fournisseur</th>
+                <th>Statut</th>
+                <th>Montant total</th>
+                <th>Actions</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:if="${#lists.isEmpty(commandes.content)}">
+                <td colspan="6" class="empty-state">Aucune commande disponible.</td>
+            </tr>
+            <tr th:each="commande : ${commandes.content}">
+                <td th:text="${commande.id}">ID</td>
+                <td th:text="${commande.dateCommande != null ? #temporals.format(commande.dateCommande, 'dd/MM/yyyy HH:mm') : '-'}">Date</td>
+                <td th:text="${fournisseurLibelles[commande.fournisseurId]} ?: '-'">Fournisseur</td>
+                <td>
+                    <span class="badge" th:text="${commande.statut}">STATUT</span>
+                </td>
+                <td th:text="${commande.montantTotal} ?: '0.00'">0.00</td>
+                <td class="actions">
+                    <a class="btn secondary" th:href="@{|/ui/commandes/${commande.id}|}">Détails</a>
+                    <a class="btn secondary" th:href="@{|/ui/commandes/${commande.id}/edition|}">Modifier</a>
+                    <form th:action="@{|/ui/commandes/${commande.id}/suppression|}" method="post"
+                          onsubmit="return confirm('Supprimer cette commande ?');">
+                        <button type="submit" class="btn danger">Supprimer</button>
+                    </form>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="pagination" th:if="${totalPages > 1}">
+        <a class="btn"
+           th:classappend="${currentPage == 0} ? ' disabled'"
+           th:href="@{|/ui/commandes?page=${currentPage - 1}&size=${pageSize}|}">Précédent</a>
+
+        <span>Page <span th:text="${currentPage + 1}">1</span> / <span th:text="${totalPages}">1</span></span>
+
+        <a class="btn"
+           th:classappend="${currentPage + 1 >= totalPages} ? ' disabled'"
+           th:href="@{|/ui/commandes?page=${currentPage + 1}&size=${pageSize}|}">Suivant</a>
+    </div>
+</main>
+</body>
+</html>
+
+

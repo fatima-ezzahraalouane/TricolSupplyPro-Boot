@@ -1,11 +1,11 @@
 package com.tricol.supply.service;
 
 import com.tricol.supply.dto.ProduitDTO;
+import com.tricol.supply.exception.ResourceNotFoundException;
+import com.tricol.supply.mapper.ProduitMapper;
 import com.tricol.supply.model.entity.MouvementStock;
 import com.tricol.supply.model.entity.Produit;
 import com.tricol.supply.model.enums.TypeMouvement;
-import com.tricol.supply.exception.ResourceNotFoundException;
-import com.tricol.supply.mapper.ProduitMapper;
 import com.tricol.supply.repository.MouvementStockRepository;
 import com.tricol.supply.repository.ProduitRepository;
 import lombok.RequiredArgsConstructor;
@@ -15,6 +15,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -27,6 +29,12 @@ public class ProduitService {
     public Page<ProduitDTO> findAll(Pageable pageable) {
         return produitRepository.findAll(pageable)
             .map(produitMapper::toDTO);
+    }
+    
+    public List<ProduitDTO> findAll() {
+        return produitRepository.findAll().stream()
+            .map(produitMapper::toDTO)
+            .collect(Collectors.toList());
     }
     
     public ProduitDTO findById(Long id) {

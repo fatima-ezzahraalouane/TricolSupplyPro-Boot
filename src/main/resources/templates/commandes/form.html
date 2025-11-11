@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="fr" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title th:text="${pageTitle}">Commande fournisseur</title>
+    <link rel="stylesheet" th:href="@{/css/main.css}">
+</head>
+<body>
+<header class="topbar">
+    <div class="container">
+        <h1 th:text="${pageTitle}">Commande fournisseur</h1>
+        <nav>
+            <a th:href="@{/ui}">Accueil</a>
+            <a th:href="@{/ui/fournisseurs}">Fournisseurs</a>
+            <a th:href="@{/ui/produits}">Produits</a>
+            <a class="active" th:href="@{/ui/commandes}">Commandes</a>
+        </nav>
+    </div>
+</header>
+
+<main class="container">
+    <div class="card">
+        <form th:action="${isNew} ? @{/ui/commandes} : @{|/ui/commandes/${commande.id}/mise-a-jour|}"
+              th:object="${commande}" method="post" class="form-grid">
+
+            <div class="form-field">
+                <label for="fournisseurId">Fournisseur *</label>
+                <select id="fournisseurId" th:field="*{fournisseurId}" required>
+                    <option value="">-- Sélectionner --</option>
+                    <option th:each="fournisseur : ${fournisseurs}"
+                            th:value="${fournisseur.id}"
+                            th:text="${fournisseur.societe}"></option>
+                </select>
+                <div class="error" th:if="${#fields.hasErrors('fournisseurId')}" th:errors="*{fournisseurId}"></div>
+            </div>
+
+            <div class="form-field">
+                <label for="statut">Statut</label>
+                <select id="statut" th:field="*{statut}">
+                    <option th:each="statutItem : ${statuts}"
+                            th:value="${statutItem}"
+                            th:text="${statutItem}"></option>
+                </select>
+                <div class="help-text" th:if="${isNew}">
+                    Le statut initial est fixé automatiquement à EN_ATTENTE.
+                </div>
+            </div>
+
+            <div class="form-field full-width">
+                <label>Produits associés *</label>
+                <p class="help-text">Laissez les lignes inutilisées vides. Les lignes vides ne seront pas enregistrées.</p>
+                <div class="error" th:if="${#fields.hasErrors('produits')}" th:errors="*{produits}"></div>
+
+                <table class="sub-table">
+                    <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Produit</th>
+                        <th>Quantité</th>
+                        <th>Prix unitaire (MAD)</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="ligne, stat : ${commande.produits}">
+                        <td th:text="${stat.index + 1}">1</td>
+                        <td>
+                            <select th:field="*{produits[__${stat.index}__].produitId}">
+                                <option value="">-- Sélectionner --</option>
+                                <option th:each="produit : ${produitsDisponibles}"
+                                        th:value="${produit.id}"
+                                        th:text="${produit.nom}"></option>
+                            </select>
+                        </td>
+                        <td>
+                            <input type="number" min="1" th:field="*{produits[__${stat.index}__].quantite}">
+                        </td>
+                        <td>
+                            <input type="number" min="0" step="0.01"
+                                   th:field="*{produits[__${stat.index}__].prixUnitaireCommande}">
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="form-field full-width" th:if="${detail != null}">
+                <h2>Historique</h2>
+                <ul class="meta-list">
+                    <li>Date de commande : <span th:text="${detail.dateCommande != null ? #temporals.format(detail.dateCommande, 'dd/MM/yyyy HH:mm') : '-'}">-</span></li>
+                    <li>Dernière mise à jour : <span th:text="${detail.updatedAt != null ? #temporals.format(detail.updatedAt, 'dd/MM/yyyy HH:mm') : '-'}">-</span></li>
+                    <li>Montant total actuel : <strong th:text="${detail.montantTotal} ?: '0.00'">0.00</strong></li>
+                </ul>
+            </div>
+
+            <div class="form-actions">
+                <a class="btn" th:href="@{/ui/commandes}">Annuler</a>
+                <button class="btn primary" type="submit"
+                        th:text="${isNew} ? 'Créer' : 'Enregistrer'">Enregistrer</button>
+            </div>
+        </form>
+    </div>
+</main>
+</body>
+</html>
+
+

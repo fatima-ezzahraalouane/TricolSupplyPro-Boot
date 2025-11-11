@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="fr" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title th:text="${pageTitle}">Produit</title>
+    <link rel="stylesheet" th:href="@{/css/main.css}">
+</head>
+<body>
+<header class="topbar">
+    <div class="container">
+        <h1 th:text="${pageTitle}">Produit</h1>
+        <nav>
+            <a th:href="@{/ui}">Accueil</a>
+            <a th:href="@{/ui/fournisseurs}">Fournisseurs</a>
+            <a class="active" th:href="@{/ui/produits}">Produits</a>
+            <a th:href="@{/ui/commandes}">Commandes</a>
+        </nav>
+    </div>
+</header>
+
+<main class="container">
+    <div class="card">
+        <form th:action="${isNew} ? @{/ui/produits} : @{|/ui/produits/${produit.id}/mise-a-jour|}"
+              th:object="${produit}" method="post" class="form-grid">
+
+            <div class="form-field">
+                <label for="nom">Nom *</label>
+                <input id="nom" type="text" th:field="*{nom}" required>
+                <div class="error" th:if="${#fields.hasErrors('nom')}" th:errors="*{nom}"></div>
+            </div>
+
+            <div class="form-field">
+                <label for="categorie">Catégorie</label>
+                <input id="categorie" type="text" th:field="*{categorie}">
+            </div>
+
+            <div class="form-field">
+                <label for="prixUnitaire">Prix unitaire (MAD)</label>
+                <input id="prixUnitaire" type="number" step="0.01" min="0" th:field="*{prixUnitaire}">
+                <div class="error" th:if="${#fields.hasErrors('prixUnitaire')}" th:errors="*{prixUnitaire}"></div>
+            </div>
+
+            <div class="form-field">
+                <label for="stockActuel">Stock actuel</label>
+                <input id="stockActuel" type="number" min="0" th:field="*{stockActuel}">
+            </div>
+
+            <div class="form-field full-width">
+                <label for="description">Description</label>
+                <textarea id="description" rows="4" th:field="*{description}"></textarea>
+            </div>
+
+            <div class="form-actions">
+                <a class="btn" th:href="@{/ui/produits}">Annuler</a>
+                <button class="btn primary" type="submit"
+                        th:text="${isNew} ? 'Créer' : 'Enregistrer'">Enregistrer</button>
+            </div>
+        </form>
+    </div>
+</main>
+</body>
+</html>
+
+
