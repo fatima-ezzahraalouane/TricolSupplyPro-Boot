@@ -2,7 +2,7 @@
 <html lang="fr" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title th:text="${pageTitle} ?: 'Détail commande'">Détail commande</title>
+    <title th:text="${pageTitle != null ? pageTitle : 'Détail commande'}">Détail commande</title>
     <link rel="stylesheet" th:href="@{/css/main.css}">
 </head>
 <body>
@@ -14,6 +14,7 @@
             <a th:href="@{/ui/fournisseurs}">Fournisseurs</a>
             <a th:href="@{/ui/produits}">Produits</a>
             <a class="active" th:href="@{/ui/commandes}">Commandes</a>
+            <a th:href="@{/ui/mouvements}">Mouvements</a>
         </nav>
     </div>
 </header>
@@ -42,7 +43,7 @@
             </div>
             <div>
                 <dt>Montant total</dt>
-                <dd th:text="${commande.montantTotal} ?: '0.00'">0.00</dd>
+                <dd th:text="${commande.montantTotal != null ? commande.montantTotal : '0.00'}">0.00</dd>
             </div>
             <div>
                 <dt>Créée le</dt>
@@ -68,9 +69,9 @@
                 <td colspan="3" class="empty-state">Aucun produit associé.</td>
             </tr>
             <tr th:each="ligne : ${commande.produits}">
-                <td th:text="${produitLibelles[ligne.produitId]} ?: ligne.produitId">Produit</td>
+                <td th:text="${produitLibelles[ligne.produitId] != null ? produitLibelles[ligne.produitId] : ligne.produitId}">Produit</td>
                 <td th:text="${ligne.quantite}">0</td>
-                <td th:text="${ligne.prixUnitaireCommande} ?: '0.00'">0.00</td>
+                <td th:text="${ligne.prixUnitaireCommande != null ? ligne.prixUnitaireCommande : '0.00'}">0.00</td>
             </tr>
             </tbody>
         </table>

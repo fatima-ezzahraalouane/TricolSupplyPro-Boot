@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="fr" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title th:text="${pageTitle != null ? pageTitle : 'Mouvements de stock'}">Mouvements de stock</title>
+    <link rel="stylesheet" th:href="@{/css/main.css}">
+</head>
+<body>
+<header class="topbar">
+    <div class="container">
+        <h1>Mouvements de stock</h1>
+        <nav>
+            <a th:href="@{/ui}">Accueil</a>
+            <a th:href="@{/ui/fournisseurs}">Fournisseurs</a>
+            <a th:href="@{/ui/produits}">Produits</a>
+            <a th:href="@{/ui/commandes}">Commandes</a>
+            <a class="active" th:href="@{/ui/mouvements}">Mouvements</a>
+        </nav>
+    </div>
+</header>
+
+<main class="container">
+    <div class="card">
+        <form class="form-grid" method="get" th:action="@{/ui/mouvements}">
+            <div class="form-field">
+                <label for="produitId">Produit</label>
+                <select id="produitId" name="produitId" th:value="${selectedProduitId}">
+                    <option value="">Tous les produits</option>
+                    <option th:each="produit : ${produits}"
+                            th:value="${produit.id}"
+                            th:text="${produit.nom}"
+                            th:selected="${produit.id} == ${selectedProduitId}"></option>
+                </select>
+            </div>
+
+            <div class="form-field">
+                <label for="type">Type</label>
+                <select id="type" name="type" th:value="${selectedType}">
+                    <option value="">Tous les types</option>
+                    <option th:each="typeItem : ${types}"
+                            th:value="${typeItem}"
+                            th:text="${typeItem}"
+                            th:selected="${typeItem} == ${selectedType}"></option>
+                </select>
+            </div>
+
+            <div class="form-actions">
+                <a class="btn" th:href="@{/ui/mouvements}">Réinitialiser</a>
+                <button class="btn primary" type="submit">Filtrer</button>
+            </div>
+        </form>
+    </div>
+
+    <div class="card">
+        <table>
+            <thead>
+            <tr>
+                <th>Date</th>
+                <th>Produit</th>
+                <th>Type</th>
+                <th>Quantité</th>
+                <th>Prix unitaire</th>
+                <th>Commande liée</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:if="${#lists.isEmpty(mouvements.content)}">
+                <td colspan="6" class="empty-state">Aucun mouvement trouvé.</td>
+            </tr>
+            <tr th:each="mouvement : ${mouvements.content}">
+                <td th:text="${mouvement.dateMouvement != null ? #temporals.format(mouvement.dateMouvement, 'dd/MM/yyyy HH:mm') : '-'}">Date</td>
+                <td th:text="${mouvement.nomProduit != null ? mouvement.nomProduit : '-'}">Produit</td>
+                <td>
+                    <span class="badge" th:text="${mouvement.typeMouvement}">TYPE</span>
+                </td>
+                <td th:text="${mouvement.quantite != null ? mouvement.quantite : 0}">0</td>
+                <td th:text="${mouvement.prixUnitaire != null ? mouvement.prixUnitaire : '0.00'}">0.00</td>
+                <td>
+                    <a th:if="${mouvement.commandeFournisseurId != null}"
+                       th:href="@{|/ui/commandes/${mouvement.commandeFournisseurId}|}">
+                        <span th:text="'Commande #' + ${mouvement.commandeFournisseurId}">Commande</span>
+                    </a>
+                    <span th:if="${mouvement.commandeFournisseurId == null}">-</span>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="pagination" th:if="${totalPages > 1}">
+        <a class="btn"
+           th:classappend="${currentPage == 0} ? ' disabled'"
+           th:href="@{/ui/mouvements(page=${currentPage - 1}, size=${pageSize}, produitId=${selectedProduitId}, type=${selectedType})}">Précédent</a>
+
+        <span>Page <span th:text="${currentPage + 1}">1</span> / <span th:text="${totalPages}">1</span></span>
+
+        <a class="btn"
+           th:classappend="${currentPage + 1 >= totalPages} ? ' disabled'"
+           th:href="@{/ui/mouvements(page=${currentPage + 1}, size=${pageSize}, produitId=${selectedProduitId}, type=${selectedType})}">Suivant</a>
+    </div>
+</main>
+</body>
+</html>
+
+
+

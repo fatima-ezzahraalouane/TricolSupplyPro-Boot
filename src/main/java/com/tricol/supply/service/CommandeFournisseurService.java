@@ -60,7 +60,13 @@ public class CommandeFournisseurService {
         List<CommandeProduit> commandeProduits = new ArrayList<>();
         BigDecimal montantTotal = BigDecimal.ZERO;
         
+        java.util.Set<Long> produitsDejaAjoutes = new java.util.HashSet<>();
+        
         for (ProduitCommandeDTO produitDTO : dto.getProduits()) {
+            if (!produitsDejaAjoutes.add(produitDTO.getProduitId())) {
+                throw new IllegalArgumentException("Un produit ne peut être ajouté qu'une seule fois par commande.");
+            }
+            
             Produit produit = produitRepository.findById(produitDTO.getProduitId())
                 .orElseThrow(() -> new ResourceNotFoundException("Produit", produitDTO.getProduitId()));
             
@@ -116,17 +122,27 @@ public class CommandeFournisseurService {
         Fournisseur fournisseur = fournisseurRepository.findById(dto.getFournisseurId())
             .orElseThrow(() -> new ResourceNotFoundException("Fournisseur", dto.getFournisseurId()));
         
-        existing.setFournisseur(fournisseur);
-        existing.setStatut(dto.getStatut());
+        StatutCommande ancienStatut = existing.getStatut();
+        StatutCommande nouveauStatut = dto.getStatut();
         
-        // supprimer les anciens produits
-        commandeProduitRepository.deleteAll(existing.getCommandeProduits());
+        existing.setFournisseur(fournisseur);
+        existing.setStatut(nouveauStatut);
+        
+        // supprimer les anciens produits (orphanRemoval = true) et forcer la suppression en base
+        existing.getCommandeProduits().clear();
+        commandeProduitRepository.deleteByCommande(existing);
+        commandeProduitRepository.flush();
         
         // ajouter les nouveaux produits
-        List<CommandeProduit> commandeProduits = new ArrayList<>();
         BigDecimal montantTotal = BigDecimal.ZERO;
         
+        java.util.Set<Long> produitsDejaAjoutes = new java.util.HashSet<>();
+        
         for (ProduitCommandeDTO produitDTO : dto.getProduits()) {
+            if (!produitsDejaAjoutes.add(produitDTO.getProduitId())) {
+                throw new IllegalArgumentException("Un produit ne peut être ajouté qu'une seule fois par commande.");
+            }
+            
             Produit produit = produitRepository.findById(produitDTO.getProduitId())
                 .orElseThrow(() -> new ResourceNotFoundException("Produit", produitDTO.getProduitId()));
             
@@ -137,15 +153,16 @@ public class CommandeFournisseurService {
                 .prixUnitaireCommande(produitDTO.getPrixUnitaireCommande())
                 .build();
             
-            commandeProduits.add(cp);
+            existing.getCommandeProduits().add(cp);
             
             BigDecimal montantLigne = produitDTO.getPrixUnitaireCommande()
                 .multiply(BigDecimal.valueOf(produitDTO.getQuantite()));
             montantTotal = montantTotal.add(montantLigne);
         }
         
-        commandeProduitRepository.saveAll(commandeProduits);
         existing.setMontantTotal(montantTotal);
+        
+        appliquerTransitionStatut(existing, ancienStatut, nouveauStatut);
         
         CommandeFournisseur updated = commandeRepository.save(existing);
         return commandeMapper.toDetailDTO(updated);
@@ -170,6 +187,17 @@ public class CommandeFournisseurService {
             .orElseThrow(() -> new ResourceNotFoundException("Commande", id));
         
         StatutCommande ancienStatut = commande.getStatut();
+        appliquerTransitionStatut(commande, ancienStatut, nouveauStatut);
+        commande.setStatut(nouveauStatut);
+        CommandeFournisseur updated = commandeRepository.save(commande);
+        
+        return commandeMapper.toDetailDTO(updated);
+    }
+
+    private void appliquerTransitionStatut(CommandeFournisseur commande, StatutCommande ancienStatut, StatutCommande nouveauStatut) {
+        if (nouveauStatut == null) {
+            return;
+        }
         
         // gerer automatiquement les mouvements de stock lors de la livraison
         if (nouveauStatut == StatutCommande.LIVREE && ancienStatut != StatutCommande.LIVREE) {
@@ -180,11 +208,6 @@ public class CommandeFournisseurService {
         if (nouveauStatut == StatutCommande.ANNULEE && ancienStatut != StatutCommande.ANNULEE && ancienStatut != StatutCommande.LIVREE) {
             restaurerStockPourAnnulation(commande);
         }
-        
-        commande.setStatut(nouveauStatut);
-        CommandeFournisseur updated = commandeRepository.save(commande);
-        
-        return commandeMapper.toDetailDTO(updated);
     }
 
     private void creerMouvementsStockPourLivraison(CommandeFournisseur commande) {

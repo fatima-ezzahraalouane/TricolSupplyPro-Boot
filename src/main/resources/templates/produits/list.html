@@ -2,7 +2,7 @@
 <html lang="fr" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title th:text="${pageTitle} ?: 'Produits'">Produits</title>
+    <title th:text="${pageTitle != null ? pageTitle : 'Produits'}">Produits</title>
     <link rel="stylesheet" th:href="@{/css/main.css}">
 </head>
 <body>
@@ -14,6 +14,7 @@
             <a th:href="@{/ui/fournisseurs}">Fournisseurs</a>
             <a class="active" th:href="@{/ui/produits}">Produits</a>
             <a th:href="@{/ui/commandes}">Commandes</a>
+            <a th:href="@{/ui/mouvements}">Mouvements</a>
         </nav>
     </div>
 </header>
@@ -43,10 +44,10 @@
             </tr>
             <tr th:each="produit : ${produits.content}">
                 <td th:text="${produit.nom}">Nom produit</td>
-                <td th:text="${produit.categorie} ?: '-'">Catégorie</td>
-                <td th:text="${produit.prixUnitaire} ?: '0.00'}">0.00</td>
-                <td th:text="${produit.stockActuel} ?: 0">0</td>
-                <td th:text="${produit.description} ?: '-'}">Description</td>
+                <td th:text="${produit.categorie != null ? produit.categorie : '-'}">Catégorie</td>
+                <td th:text="${produit.prixUnitaire != null ? produit.prixUnitaire : '0.00'}">0.00</td>
+                <td th:text="${produit.stockActuel != null ? produit.stockActuel : 0}">0</td>
+                <td th:text="${produit.description != null ? produit.description : '-'}">Description</td>
                 <td class="actions">
                     <a class="btn secondary" th:href="@{|/ui/produits/${produit.id}/edition|}">Modifier</a>
                     <form th:action="@{|/ui/produits/${produit.id}/suppression|}" method="post"

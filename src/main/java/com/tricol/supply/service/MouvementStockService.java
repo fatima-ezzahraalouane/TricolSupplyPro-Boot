@@ -10,6 +10,9 @@ import com.tricol.supply.repository.CommandeFournisseurRepository;
 import com.tricol.supply.repository.MouvementStockRepository;
 import com.tricol.supply.repository.ProduitRepository;
 import lombok.RequiredArgsConstructor;
+import com.tricol.supply.model.enums.TypeMouvement;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -22,6 +25,40 @@ public class MouvementStockService {
     private final ProduitRepository produitRepository;
     private final CommandeFournisseurRepository commandeRepository;
     private final MouvementStockMapper mouvementMapper;
+    
+    public Page<MouvementStockDTO> findAll(Pageable pageable) {
+        return mouvementStockRepository.findAll(pageable)
+            .map(mouvementMapper::toDTO);
+    }
+    
+    public Page<MouvementStockDTO> findByFilters(Long produitId, TypeMouvement type, Pageable pageable) {
+        if (produitId != null) {
+            Produit produit = produitRepository.findById(produitId)
+                .orElseThrow(() -> new ResourceNotFoundException("Produit", produitId));
+            
+            if (type != null) {
+                return mouvementStockRepository.findByProduitAndTypeMouvement(produit, type, pageable)
+                    .map(mouvementMapper::toDTO);
+            }
+            return mouvementStockRepository.findByProduit(produit, pageable)
+                .map(mouvementMapper::toDTO);
+        }
+        
+        if (type != null) {
+            return mouvementStockRepository.findByTypeMouvement(type, pageable)
+                .map(mouvementMapper::toDTO);
+        }
+        
+        return findAll(pageable);
+    }
+    
+    public Page<MouvementStockDTO> findByCommande(Long commandeId, Pageable pageable) {
+        CommandeFournisseur commande = commandeRepository.findById(commandeId)
+            .orElseThrow(() -> new ResourceNotFoundException("Commande", commandeId));
+        
+        return mouvementStockRepository.findByCommandeFournisseur(commande, pageable)
+            .map(mouvementMapper::toDTO);
+    }
     
     public List<MouvementStockDTO> findByProduit(Long produitId) {
         Produit produit = produitRepository.findById(produitId)

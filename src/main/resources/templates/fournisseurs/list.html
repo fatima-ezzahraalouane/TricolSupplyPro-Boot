@@ -2,7 +2,7 @@
 <html lang="fr" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title th:text="${pageTitle} ?: 'Fournisseurs'">Fournisseurs</title>
+    <title th:text="${pageTitle != null ? pageTitle : 'Fournisseurs'}">Fournisseurs</title>
     <link rel="stylesheet" th:href="@{/css/main.css}">
 </head>
 <body>
@@ -14,6 +14,7 @@
             <a class="active" th:href="@{/ui/fournisseurs}">Fournisseurs</a>
             <a th:href="@{/ui/produits}">Produits</a>
             <a th:href="@{/ui/commandes}">Commandes</a>
+            <a th:href="@{/ui/mouvements}">Mouvements</a>
         </nav>
     </div>
 </header>
@@ -43,10 +44,10 @@
             </tr>
             <tr th:each="fournisseur : ${fournisseurs.content}">
                 <td th:text="${fournisseur.societe}">Fournisseur</td>
-                <td th:text="${fournisseur.contact} ?: '-'">Contact</td>
-                <td th:text="${fournisseur.email} ?: '-'">Email</td>
-                <td th:text="${fournisseur.telephone} ?: '-'">Téléphone</td>
-                <td th:text="${fournisseur.ville} ?: '-'">Ville</td>
+                <td th:text="${fournisseur.contact != null ? fournisseur.contact : '-'}">Contact</td>
+                <td th:text="${fournisseur.email != null ? fournisseur.email : '-'}">Email</td>
+                <td th:text="${fournisseur.telephone != null ? fournisseur.telephone : '-'}">Téléphone</td>
+                <td th:text="${fournisseur.ville != null ? fournisseur.ville : '-'}">Ville</td>
                 <td class="actions">
                     <a class="btn secondary" th:href="@{|/ui/fournisseurs/${fournisseur.id}/edition|}">Modifier</a>
                     <form th:action="@{|/ui/fournisseurs/${fournisseur.id}/suppression|}" method="post"

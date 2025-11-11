@@ -2,7 +2,7 @@
 <html lang="fr" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title th:text="${pageTitle} ?: 'Tricol Supply Pro'">Tricol Supply Pro</title>
+    <title th:text="${pageTitle != null ? pageTitle : 'Tricol Supply Pro'}">Tricol Supply Pro</title>
     <link rel="stylesheet" th:href="@{/css/main.css}">
 </head>
 <body>
@@ -14,6 +14,7 @@
             <a th:href="@{/ui/fournisseurs}">Fournisseurs</a>
             <a th:href="@{/ui/produits}">Produits</a>
             <a th:href="@{/ui/commandes}">Commandes fournisseurs</a>
+            <a th:href="@{/ui/mouvements}">Mouvements</a>
         </nav>
     </div>
 </header>

@@ -14,6 +14,7 @@
             <a th:href="@{/ui/fournisseurs}">Fournisseurs</a>
             <a th:href="@{/ui/produits}">Produits</a>
             <a class="active" th:href="@{/ui/commandes}">Commandes</a>
+            <a th:href="@{/ui/mouvements}">Mouvements</a>
         </nav>
     </div>
 </header>
@@ -88,7 +89,7 @@
                 <ul class="meta-list">
                     <li>Date de commande : <span th:text="${detail.dateCommande != null ? #temporals.format(detail.dateCommande, 'dd/MM/yyyy HH:mm') : '-'}">-</span></li>
                     <li>Dernière mise à jour : <span th:text="${detail.updatedAt != null ? #temporals.format(detail.updatedAt, 'dd/MM/yyyy HH:mm') : '-'}">-</span></li>
-                    <li>Montant total actuel : <strong th:text="${detail.montantTotal} ?: '0.00'">0.00</strong></li>
+                    <li>Montant total actuel : <strong th:text="${detail.montantTotal != null ? detail.montantTotal : '0.00'}">0.00</strong></li>
                 </ul>
             </div>
 
