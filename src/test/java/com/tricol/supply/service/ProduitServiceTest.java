@@ -382,6 +382,17 @@ class ProduitServiceTest {
         verify(produitRepository, times(1)).deleteById(id);
     }
 
-    
+    @Test
+    @DisplayName("Doit lever une exception lors de la suppression d'un produit inexistant")
+    void testDelete_NotFound() {
+        // Given
+        Long id = 999L;
+        when(produitRepository.existsById(id)).thenReturn(false);
+
+        // When & Then
+        assertThrows(ResourceNotFoundException.class, () -> produitService.delete(id));
+        verify(produitRepository, times(1)).existsById(id);
+        verify(produitRepository, never()).deleteById(any());
+    }
 }
 
