@@ -180,6 +180,58 @@ class ProduitServiceTest {
         verify(mouvementStockRepository, never()).save(any(MouvementStock.class));
     }
 
+    @Test
+    @DisplayName("Doit recalculer le CUMP lors d'une augmentation de stock")
+    void testUpdate_RecalculateCUMP_StockIncrease() {
+        // Given
+        Long id = 1L;
+        
+        // Produit existant : stock=50, CUMP=5500.00
+        Produit existingProduit = Produit.builder()
+                .id(id)
+                .nom("Ordinateur Portable HP")
+                .prixUnitaire(new BigDecimal("5500.00"))
+                .stockActuel(50)
+                .coutUnitaireMoyen(new BigDecimal("5500.00"))
+                .build();
+
+        // Nouveau DTO : stock=75 (ajout de 25 unités), prix=6000.00
+        ProduitDTO dtoUpdate = new ProduitDTO();
+        dtoUpdate.setNom("Ordinateur Portable HP Modifié");
+        dtoUpdate.setPrixUnitaire(new BigDecimal("6000.00"));
+        dtoUpdate.setStockActuel(75);
+
+        when(produitRepository.findById(id)).thenReturn(Optional.of(existingProduit));
+        when(produitRepository.save(any(Produit.class))).thenReturn(existingProduit);
+        when(produitMapper.toDTO(any(Produit.class))).thenReturn(produitDTO);
+
+        ArgumentCaptor<Produit> produitCaptor = ArgumentCaptor.forClass(Produit.class);
+        ArgumentCaptor<MouvementStock> mouvementCaptor = ArgumentCaptor.forClass(MouvementStock.class);
+
+        // When
+        produitService.update(id, dtoUpdate);
+
+        // Then
+        verify(produitRepository, times(1)).save(produitCaptor.capture());
+        Produit updatedProduit = produitCaptor.getValue();
+
+        // Calcul CUMP attendu : (50 * 5500 + 25 * 6000) / 75 = 5666.67
+        BigDecimal expectedCump = new BigDecimal("50")
+                .multiply(new BigDecimal("5500"))
+                .add(new BigDecimal("25").multiply(new BigDecimal("6000")))
+                .divide(new BigDecimal("75"), 2, RoundingMode.HALF_UP);
+
+        assertEquals(expectedCump, updatedProduit.getCoutUnitaireMoyen(), 
+                "Le CUMP doit être recalculé selon la formule CUMP");
+        assertEquals(75, updatedProduit.getStockActuel());
+        
+        verify(mouvementStockRepository, times(1)).save(mouvementCaptor.capture());
+        MouvementStock mouvementCree = mouvementCaptor.getValue();
+        assertEquals(TypeMouvement.AJUSTEMENT, mouvementCree.getTypeMouvement(),
+                "Le type de mouvement doit être AJUSTEMENT lors d'une modification manuelle du stock");
+        assertEquals(25, mouvementCree.getQuantite());
+    }
+
     
 }
 
