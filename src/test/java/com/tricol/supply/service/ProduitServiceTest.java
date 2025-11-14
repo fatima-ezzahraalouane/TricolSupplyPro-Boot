@@ -51,6 +51,29 @@ class ProduitServiceTest {
     private Produit produit;
     private ProduitDTO produitDTO;
 
+    @BeforeEach
+    void setUp() {
+        produit = Produit.builder()
+                .id(1L)
+                .nom("Ordinateur Portable HP")
+                .description("Ordinateur portable HP 15 pouces")
+                .prixUnitaire(new BigDecimal("5500.00"))
+                .categorie("Informatique")
+                .stockActuel(50)
+                .coutUnitaireMoyen(new BigDecimal("5500.00"))
+                .createdAt(LocalDateTime.now())
+                .updatedAt(LocalDateTime.now())
+                .build();
+
+        produitDTO = new ProduitDTO();
+        produitDTO.setId(1L);
+        produitDTO.setNom("Ordinateur Portable HP");
+        produitDTO.setDescription("Ordinateur portable HP 15 pouces");
+        produitDTO.setPrixUnitaire(new BigDecimal("5500.00"));
+        produitDTO.setCategorie("Informatique");
+        produitDTO.setStockActuel(50);
+    }
+
     
 }
 
