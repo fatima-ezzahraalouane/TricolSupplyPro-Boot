@@ -112,6 +112,18 @@ class ProduitServiceTest {
         verify(produitRepository, times(1)).findById(id);
     }
 
+    @Test
+    @DisplayName("Doit lever une exception quand le produit n'existe pas")
+    void testFindById_NotFound() {
+        // Given
+        Long id = 999L;
+        when(produitRepository.findById(id)).thenReturn(Optional.empty());
+
+        // When & Then
+        assertThrows(ResourceNotFoundException.class, () -> produitService.findById(id));
+        verify(produitRepository, times(1)).findById(id);
+    }
+
     
 }
 
