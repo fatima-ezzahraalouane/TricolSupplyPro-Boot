@@ -154,6 +154,32 @@ class ProduitServiceTest {
         assertEquals(50, mouvementCree.getQuantite());
     }
 
+    @Test
+    @DisplayName("Doit créer un produit sans stock avec CUMP à zéro")
+    void testCreate_WithoutStock() {
+        // Given
+        produitDTO.setStockActuel(0);
+        produit.setStockActuel(0);
+        produit.setCoutUnitaireMoyen(BigDecimal.ZERO);
+
+        when(produitMapper.toEntity(produitDTO)).thenReturn(produit);
+        when(produitRepository.save(any(Produit.class))).thenReturn(produit);
+        when(produitMapper.toDTO(produit)).thenReturn(produitDTO);
+
+        ArgumentCaptor<Produit> produitCaptor = ArgumentCaptor.forClass(Produit.class);
+
+        // When
+        produitService.create(produitDTO);
+
+        // Then
+        verify(produitRepository, times(1)).save(produitCaptor.capture());
+        Produit savedProduit = produitCaptor.getValue();
+        assertEquals(BigDecimal.ZERO, savedProduit.getCoutUnitaireMoyen(), 
+                "Le CUMP doit être zéro quand stock = 0");
+        
+        verify(mouvementStockRepository, never()).save(any(MouvementStock.class));
+    }
+
     
 }
 
