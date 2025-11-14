@@ -90,6 +90,25 @@ class FournisseurServiceTest {
         verify(fournisseurMapper, times(1)).toDTO(any(Fournisseur.class));
     }
 
+    @Test
+    @DisplayName("Doit retourner un fournisseur par son ID")
+    void testFindById_Success() {
+        // Given
+        Long id = 1L;
+        when(fournisseurRepository.findById(id)).thenReturn(Optional.of(fournisseur));
+        when(fournisseurMapper.toDTO(fournisseur)).thenReturn(fournisseurDTO);
+
+        // When
+        FournisseurDTO result = fournisseurService.findById(id);
+
+        // Then
+        assertNotNull(result);
+        assertEquals(id, result.getId());
+        assertEquals("Fournisseur Test SARL", result.getSociete());
+        verify(fournisseurRepository, times(1)).findById(id);
+        verify(fournisseurMapper, times(1)).toDTO(fournisseur);
+    }
+
     
 }
 
