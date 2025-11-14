@@ -95,6 +95,23 @@ class ProduitServiceTest {
         verify(produitMapper, times(1)).toDTO(any(Produit.class));
     }
 
+    @Test
+    @DisplayName("Doit retourner un produit par son ID")
+    void testFindById_Success() {
+        // Given
+        Long id = 1L;
+        when(produitRepository.findById(id)).thenReturn(Optional.of(produit));
+        when(produitMapper.toDTO(produit)).thenReturn(produitDTO);
+
+        // When
+        ProduitDTO result = produitService.findById(id);
+
+        // Then
+        assertNotNull(result);
+        assertEquals(id, result.getId());
+        verify(produitRepository, times(1)).findById(id);
+    }
+
     
 }
 
