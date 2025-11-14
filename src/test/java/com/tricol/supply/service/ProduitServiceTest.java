@@ -232,6 +232,48 @@ class ProduitServiceTest {
         assertEquals(25, mouvementCree.getQuantite());
     }
 
+    @Test
+    @DisplayName("Doit conserver le CUMP lors d'une diminution de stock")
+    void testUpdate_KeepCUMP_StockDecrease() {
+        // Given
+        Long id = 1L;
+        
+        Produit existingProduit = Produit.builder()
+                .id(id)
+                .prixUnitaire(new BigDecimal("5500.00"))
+                .stockActuel(50)
+                .coutUnitaireMoyen(new BigDecimal("5500.00"))
+                .build();
+
+        ProduitDTO dtoUpdate = new ProduitDTO();
+        dtoUpdate.setPrixUnitaire(new BigDecimal("6000.00"));
+        dtoUpdate.setStockActuel(30); // Diminution de 20 unités
+
+        when(produitRepository.findById(id)).thenReturn(Optional.of(existingProduit));
+        when(produitRepository.save(any(Produit.class))).thenReturn(existingProduit);
+        when(produitMapper.toDTO(any(Produit.class))).thenReturn(produitDTO);
+
+        ArgumentCaptor<Produit> produitCaptor = ArgumentCaptor.forClass(Produit.class);
+        ArgumentCaptor<MouvementStock> mouvementCaptor = ArgumentCaptor.forClass(MouvementStock.class);
+
+        // When
+        produitService.update(id, dtoUpdate);
+
+        // Then
+        verify(produitRepository, times(1)).save(produitCaptor.capture());
+        Produit updatedProduit = produitCaptor.getValue();
+
+        // Le CUMP doit rester inchangé lors d'une sortie
+        assertEquals(new BigDecimal("5500.00"), updatedProduit.getCoutUnitaireMoyen(), 
+                "Le CUMP ne doit pas changer lors d'une sortie de stock");
+        
+        verify(mouvementStockRepository, times(1)).save(mouvementCaptor.capture());
+        MouvementStock mouvementCree = mouvementCaptor.getValue();
+        assertEquals(TypeMouvement.AJUSTEMENT, mouvementCree.getTypeMouvement(),
+                "Le type de mouvement doit être AJUSTEMENT lors d'une modification manuelle du stock");
+        assertEquals(20, mouvementCree.getQuantite());
+    }
+
     
 }
 
