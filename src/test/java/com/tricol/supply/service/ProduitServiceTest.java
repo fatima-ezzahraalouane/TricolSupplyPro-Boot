@@ -325,6 +325,47 @@ class ProduitServiceTest {
         verify(mouvementStockRepository, never()).save(any(MouvementStock.class));
     }
 
+    @Test
+    @DisplayName("Doit mettre le CUMP à zéro si le stock devient nul")
+    void testUpdate_StockToZero() {
+        // Given
+        Long id = 1L;
+        
+        Produit existingProduit = Produit.builder()
+                .id(id)
+                .prixUnitaire(new BigDecimal("5500.00"))
+                .stockActuel(10)
+                .coutUnitaireMoyen(new BigDecimal("5500.00"))
+                .build();
+
+        ProduitDTO dtoUpdate = new ProduitDTO();
+        dtoUpdate.setPrixUnitaire(new BigDecimal("6000.00"));
+        dtoUpdate.setStockActuel(0);
+
+        when(produitRepository.findById(id)).thenReturn(Optional.of(existingProduit));
+        when(produitRepository.save(any(Produit.class))).thenReturn(existingProduit);
+        when(produitMapper.toDTO(any(Produit.class))).thenReturn(produitDTO);
+
+        ArgumentCaptor<Produit> produitCaptor = ArgumentCaptor.forClass(Produit.class);
+        ArgumentCaptor<MouvementStock> mouvementCaptor = ArgumentCaptor.forClass(MouvementStock.class);
+
+        // When
+        produitService.update(id, dtoUpdate);
+
+        // Then
+        verify(produitRepository, times(1)).save(produitCaptor.capture());
+        Produit updatedProduit = produitCaptor.getValue();
+
+        assertEquals(BigDecimal.ZERO, updatedProduit.getCoutUnitaireMoyen(), 
+                "Le CUMP doit être zéro si le stock devient nul");
+        
+        verify(mouvementStockRepository, times(1)).save(mouvementCaptor.capture());
+        MouvementStock mouvementCree = mouvementCaptor.getValue();
+        assertEquals(TypeMouvement.AJUSTEMENT, mouvementCree.getTypeMouvement(),
+                "Le type de mouvement doit être AJUSTEMENT lors d'une modification manuelle du stock");
+        assertEquals(10, mouvementCree.getQuantite());
+    }
+
     
 }
 
