@@ -124,6 +124,36 @@ class ProduitServiceTest {
         verify(produitRepository, times(1)).findById(id);
     }
 
+    @Test
+    @DisplayName("Doit créer un produit avec calcul automatique du CUMP initial")
+    void testCreate_WithStock() {
+        // Given
+        when(produitMapper.toEntity(produitDTO)).thenReturn(produit);
+        when(produitRepository.save(any(Produit.class))).thenReturn(produit);
+        when(produitMapper.toDTO(produit)).thenReturn(produitDTO);
+        when(mouvementStockRepository.save(any(MouvementStock.class))).thenReturn(new MouvementStock());
+
+        ArgumentCaptor<Produit> produitCaptor = ArgumentCaptor.forClass(Produit.class);
+        ArgumentCaptor<MouvementStock> mouvementCaptor = ArgumentCaptor.forClass(MouvementStock.class);
+
+        // When
+        ProduitDTO result = produitService.create(produitDTO);
+
+        // Then
+        assertNotNull(result);
+        verify(produitRepository, times(1)).save(produitCaptor.capture());
+        
+        Produit savedProduit = produitCaptor.getValue();
+        assertEquals(new BigDecimal("5500.00"), savedProduit.getCoutUnitaireMoyen(), 
+                "Le CUMP initial doit être égal au prix unitaire quand stock > 0");
+        
+        verify(mouvementStockRepository, times(1)).save(mouvementCaptor.capture());
+        MouvementStock mouvementCree = mouvementCaptor.getValue();
+        assertEquals(TypeMouvement.ENTREE, mouvementCree.getTypeMouvement(),
+                "Le type de mouvement doit être ENTREE lors de la création d'un produit avec stock");
+        assertEquals(50, mouvementCree.getQuantite());
+    }
+
     
 }
 
