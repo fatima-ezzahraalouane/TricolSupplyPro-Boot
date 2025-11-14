@@ -68,6 +68,28 @@ class FournisseurServiceTest {
         fournisseurDTO.setIce("001234567890001");
     }
 
+    @Test
+    @DisplayName("Doit retourner une page de fournisseurs")
+    void testFindAll() {
+        // Given
+        Pageable pageable = PageRequest.of(0, 10);
+        List<Fournisseur> fournisseurs = Arrays.asList(fournisseur);
+        Page<Fournisseur> page = new PageImpl<>(fournisseurs, pageable, 1);
+
+        when(fournisseurRepository.findAll(pageable)).thenReturn(page);
+        when(fournisseurMapper.toDTO(any(Fournisseur.class))).thenReturn(fournisseurDTO);
+
+        // When
+        Page<FournisseurDTO> result = fournisseurService.findAll(pageable);
+
+        // Then
+        assertNotNull(result);
+        assertEquals(1, result.getTotalElements());
+        assertEquals(fournisseurDTO, result.getContent().get(0));
+        verify(fournisseurRepository, times(1)).findAll(pageable);
+        verify(fournisseurMapper, times(1)).toDTO(any(Fournisseur.class));
+    }
+
     
 }
 
