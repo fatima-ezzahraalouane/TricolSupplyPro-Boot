@@ -274,6 +274,57 @@ class ProduitServiceTest {
         assertEquals(20, mouvementCree.getQuantite());
     }
 
+    @Test
+    @DisplayName("Doit mettre à jour un produit sans modifier le stock (aucun mouvement créé)")
+    void testUpdate_WithoutStockChange() {
+        // Given
+        Long id = 1L;
+        
+        Produit existingProduit = Produit.builder()
+                .id(id)
+                .nom("Ordinateur Portable HP")
+                .description("Description originale")
+                .prixUnitaire(new BigDecimal("5500.00"))
+                .categorie("Informatique")
+                .stockActuel(50)
+                .coutUnitaireMoyen(new BigDecimal("5500.00"))
+                .build();
+
+        ProduitDTO dtoUpdate = new ProduitDTO();
+        dtoUpdate.setNom("Ordinateur Portable HP Modifié");
+        dtoUpdate.setDescription("Nouvelle description");
+        dtoUpdate.setPrixUnitaire(new BigDecimal("6000.00"));
+        dtoUpdate.setCategorie("Électronique");
+        dtoUpdate.setStockActuel(50); // Même stock, pas de modification
+
+        when(produitRepository.findById(id)).thenReturn(Optional.of(existingProduit));
+        when(produitRepository.save(any(Produit.class))).thenReturn(existingProduit);
+        when(produitMapper.toDTO(any(Produit.class))).thenReturn(produitDTO);
+
+        ArgumentCaptor<Produit> produitCaptor = ArgumentCaptor.forClass(Produit.class);
+
+        // When
+        produitService.update(id, dtoUpdate);
+
+        // Then
+        verify(produitRepository, times(1)).save(produitCaptor.capture());
+        Produit updatedProduit = produitCaptor.getValue();
+        
+        // Vérifier que les autres champs sont mis à jour
+        assertEquals("Ordinateur Portable HP Modifié", updatedProduit.getNom());
+        assertEquals("Nouvelle description", updatedProduit.getDescription());
+        assertEquals(new BigDecimal("6000.00"), updatedProduit.getPrixUnitaire());
+        assertEquals("Électronique", updatedProduit.getCategorie());
+        
+        // Le stock et CUMP ne doivent pas changer
+        assertEquals(50, updatedProduit.getStockActuel());
+        assertEquals(new BigDecimal("5500.00"), updatedProduit.getCoutUnitaireMoyen(),
+                "Le CUMP ne doit pas changer si le stock n'est pas modifié");
+        
+        // Aucun mouvement ne doit être créé
+        verify(mouvementStockRepository, never()).save(any(MouvementStock.class));
+    }
+
     
 }
 
