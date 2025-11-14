@@ -36,6 +36,21 @@ import static org.mockito.Mockito.*;
 @DisplayName("Tests unitaires pour ProduitService")
 class ProduitServiceTest {
 
+    @Mock
+    private ProduitRepository produitRepository;
+
+    @Mock
+    private ProduitMapper produitMapper;
+
+    @Mock
+    private MouvementStockRepository mouvementStockRepository;
+
+    @InjectMocks
+    private ProduitService produitService;
+
+    private Produit produit;
+    private ProduitDTO produitDTO;
+
     
 }
 
