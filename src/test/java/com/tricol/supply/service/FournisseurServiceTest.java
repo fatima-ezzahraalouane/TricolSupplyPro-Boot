@@ -109,6 +109,19 @@ class FournisseurServiceTest {
         verify(fournisseurMapper, times(1)).toDTO(fournisseur);
     }
 
+    @Test
+    @DisplayName("Doit lever une exception quand le fournisseur n'existe pas")
+    void testFindById_NotFound() {
+        // Given
+        Long id = 999L;
+        when(fournisseurRepository.findById(id)).thenReturn(Optional.empty());
+
+        // When & Then
+        assertThrows(ResourceNotFoundException.class, () -> fournisseurService.findById(id));
+        verify(fournisseurRepository, times(1)).findById(id);
+        verify(fournisseurMapper, never()).toDTO(any());
+    }
+
     
 }
 
