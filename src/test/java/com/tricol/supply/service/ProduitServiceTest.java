@@ -366,6 +366,22 @@ class ProduitServiceTest {
         assertEquals(10, mouvementCree.getQuantite());
     }
 
+    @Test
+    @DisplayName("Doit supprimer un produit existant")
+    void testDelete_Success() {
+        // Given
+        Long id = 1L;
+        when(produitRepository.existsById(id)).thenReturn(true);
+        doNothing().when(produitRepository).deleteById(id);
+
+        // When
+        produitService.delete(id);
+
+        // Then
+        verify(produitRepository, times(1)).existsById(id);
+        verify(produitRepository, times(1)).deleteById(id);
+    }
+
     
 }
 
