@@ -74,6 +74,27 @@ class ProduitServiceTest {
         produitDTO.setStockActuel(50);
     }
 
+    @Test
+    @DisplayName("Doit retourner une page de produits")
+    void testFindAll() {
+        // Given
+        Pageable pageable = PageRequest.of(0, 10);
+        List<Produit> produits = Arrays.asList(produit);
+        Page<Produit> page = new PageImpl<>(produits, pageable, 1);
+
+        when(produitRepository.findAll(pageable)).thenReturn(page);
+        when(produitMapper.toDTO(any(Produit.class))).thenReturn(produitDTO);
+
+        // When
+        Page<ProduitDTO> result = produitService.findAll(pageable);
+
+        // Then
+        assertNotNull(result);
+        assertEquals(1, result.getTotalElements());
+        verify(produitRepository, times(1)).findAll(pageable);
+        verify(produitMapper, times(1)).toDTO(any(Produit.class));
+    }
+
     
 }
 
