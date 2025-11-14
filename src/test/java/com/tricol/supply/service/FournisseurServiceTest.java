@@ -199,6 +199,17 @@ class FournisseurServiceTest {
         verify(fournisseurRepository, times(1)).deleteById(id);
     }
 
-    
+    @Test
+    @DisplayName("Doit lever une exception lors de la suppression d'un fournisseur inexistant")
+    void testDelete_NotFound() {
+        // Given
+        Long id = 999L;
+        when(fournisseurRepository.existsById(id)).thenReturn(false);
+
+        // When & Then
+        assertThrows(ResourceNotFoundException.class, () -> fournisseurService.delete(id));
+        verify(fournisseurRepository, times(1)).existsById(id);
+        verify(fournisseurRepository, never()).deleteById(any());
+    }
 }
 
