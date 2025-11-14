@@ -85,7 +85,7 @@
             "header": [{"key": "Content-Type", "value": "application/json"}],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"nom\": \"Ordinateur Portable HP\",\n  \"description\": \"Ordinateur portable HP 15 pouces\",\n  \"prixUnitaire\": 5500.00,\n  \"categorie\": \"Informatique\",\n  \"stockActuel\": 50,\n  \"coutUnitaireMoyen\": 5200.00\n}"
+              "raw": "{\n  \"nom\": \"Ordinateur Portable HP\",\n  \"description\": \"Ordinateur portable HP 15 pouces\",\n  \"prixUnitaire\": 5500.00,\n  \"categorie\": \"Informatique\",\n  \"stockActuel\": 50\n}"
             },
             "url": "{{baseUrl}}/produits"
           }
@@ -97,7 +97,7 @@
             "header": [{"key": "Content-Type", "value": "application/json"}],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"nom\": \"Ordinateur Portable Dell\",\n  \"description\": \"Ordinateur portable Dell 17 pouces\",\n  \"prixUnitaire\": 6500.00,\n  \"categorie\": \"Informatique\",\n  \"stockActuel\": 75,\n  \"coutUnitaireMoyen\": 6200.00\n}"
+              "raw": "{\n  \"nom\": \"Ordinateur Portable Dell\",\n  \"description\": \"Ordinateur portable Dell 17 pouces\",\n  \"prixUnitaire\": 6500.00,\n  \"categorie\": \"Informatique\",\n  \"stockActuel\": 75\n}"
             },
             "url": "{{baseUrl}}/produits/1"
           }
