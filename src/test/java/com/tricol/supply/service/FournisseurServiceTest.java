@@ -183,6 +183,22 @@ class FournisseurServiceTest {
         verify(fournisseurRepository, never()).save(any());
     }
 
+    @Test
+    @DisplayName("Doit supprimer un fournisseur existant")
+    void testDelete_Success() {
+        // Given
+        Long id = 1L;
+        when(fournisseurRepository.existsById(id)).thenReturn(true);
+        doNothing().when(fournisseurRepository).deleteById(id);
+
+        // When
+        fournisseurService.delete(id);
+
+        // Then
+        verify(fournisseurRepository, times(1)).existsById(id);
+        verify(fournisseurRepository, times(1)).deleteById(id);
+    }
+
     
 }
 
