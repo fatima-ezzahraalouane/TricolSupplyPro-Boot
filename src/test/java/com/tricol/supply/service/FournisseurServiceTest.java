@@ -42,5 +42,32 @@ class FournisseurServiceTest {
     private Fournisseur fournisseur;
     private FournisseurDTO fournisseurDTO;
 
+    @BeforeEach
+    void setUp() {
+        fournisseur = Fournisseur.builder()
+                .id(1L)
+                .societe("Fournisseur Test SARL")
+                .adresse("123 Rue Test")
+                .contact("Mohamed Alami")
+                .email("contact@test.com")
+                .telephone("0612345678")
+                .ville("Casablanca")
+                .ice("001234567890001")
+                .createdAt(LocalDateTime.now())
+                .updatedAt(LocalDateTime.now())
+                .build();
+
+        fournisseurDTO = new FournisseurDTO();
+        fournisseurDTO.setId(1L);
+        fournisseurDTO.setSociete("Fournisseur Test SARL");
+        fournisseurDTO.setAdresse("123 Rue Test");
+        fournisseurDTO.setContact("Mohamed Alami");
+        fournisseurDTO.setEmail("contact@test.com");
+        fournisseurDTO.setTelephone("0612345678");
+        fournisseurDTO.setVille("Casablanca");
+        fournisseurDTO.setIce("001234567890001");
     }
+
+    
+}
 
