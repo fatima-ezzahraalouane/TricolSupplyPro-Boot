@@ -170,6 +170,19 @@ class FournisseurServiceTest {
         verify(fournisseurMapper, times(1)).toDTO(any(Fournisseur.class));
     }
 
+    @Test
+    @DisplayName("Doit lever une exception lors de la mise à jour d'un fournisseur inexistant")
+    void testUpdate_NotFound() {
+        // Given
+        Long id = 999L;
+        when(fournisseurRepository.findById(id)).thenReturn(Optional.empty());
+
+        // When & Then
+        assertThrows(ResourceNotFoundException.class, () -> fournisseurService.update(id, fournisseurDTO));
+        verify(fournisseurRepository, times(1)).findById(id);
+        verify(fournisseurRepository, never()).save(any());
+    }
+
     
 }
 
