@@ -30,6 +30,17 @@ import static org.mockito.Mockito.*;
 @DisplayName("Tests unitaires pour FournisseurService")
 class FournisseurServiceTest {
 
-    
-}
+    @Mock
+    private FournisseurRepository fournisseurRepository;
+
+    @Mock
+    private FournisseurMapper fournisseurMapper;
+
+    @InjectMocks
+    private FournisseurService fournisseurService;
+
+    private Fournisseur fournisseur;
+    private FournisseurDTO fournisseurDTO;
+
+    }
 
