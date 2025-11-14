@@ -141,6 +141,35 @@ class FournisseurServiceTest {
         verify(fournisseurMapper, times(1)).toDTO(fournisseur);
     }
 
+    @Test
+    @DisplayName("Doit mettre à jour un fournisseur existant")
+    void testUpdate_Success() {
+        // Given
+        Long id = 1L;
+        FournisseurDTO dtoUpdate = new FournisseurDTO();
+        dtoUpdate.setSociete("Fournisseur Modifié SARL");
+        dtoUpdate.setAdresse("456 Avenue Modifiée");
+        dtoUpdate.setContact("Fatima-Ezzahra");
+        dtoUpdate.setEmail("modifie@test.com");
+        dtoUpdate.setTelephone("0698765432");
+        dtoUpdate.setVille("Rabat");
+        dtoUpdate.setIce("001234567890002");
+
+        when(fournisseurRepository.findById(id)).thenReturn(Optional.of(fournisseur));
+        when(fournisseurRepository.save(any(Fournisseur.class))).thenReturn(fournisseur);
+        when(fournisseurMapper.toDTO(any(Fournisseur.class))).thenReturn(dtoUpdate);
+
+        // When
+        FournisseurDTO result = fournisseurService.update(id, dtoUpdate);
+
+        // Then
+        assertNotNull(result);
+        assertEquals("Fournisseur Modifié SARL", result.getSociete());
+        verify(fournisseurRepository, times(1)).findById(id);
+        verify(fournisseurRepository, times(1)).save(any(Fournisseur.class));
+        verify(fournisseurMapper, times(1)).toDTO(any(Fournisseur.class));
+    }
+
     
 }
 
