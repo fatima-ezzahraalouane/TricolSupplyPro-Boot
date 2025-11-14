@@ -122,6 +122,25 @@ class FournisseurServiceTest {
         verify(fournisseurMapper, never()).toDTO(any());
     }
 
+    @Test
+    @DisplayName("Doit créer un nouveau fournisseur")
+    void testCreate() {
+        // Given
+        when(fournisseurMapper.toEntity(fournisseurDTO)).thenReturn(fournisseur);
+        when(fournisseurRepository.save(any(Fournisseur.class))).thenReturn(fournisseur);
+        when(fournisseurMapper.toDTO(fournisseur)).thenReturn(fournisseurDTO);
+
+        // When
+        FournisseurDTO result = fournisseurService.create(fournisseurDTO);
+
+        // Then
+        assertNotNull(result);
+        assertEquals(fournisseurDTO.getId(), result.getId());
+        verify(fournisseurMapper, times(1)).toEntity(fournisseurDTO);
+        verify(fournisseurRepository, times(1)).save(any(Fournisseur.class));
+        verify(fournisseurMapper, times(1)).toDTO(fournisseur);
+    }
+
     
 }
 
