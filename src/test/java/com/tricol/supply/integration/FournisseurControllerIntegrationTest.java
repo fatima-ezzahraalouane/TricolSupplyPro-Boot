@@ -68,6 +68,17 @@ class FournisseurControllerIntegrationTest {
                 .andExpect(jsonPath("$.content[0].email").value("contact@test.com"));
     }
 
+    @Test
+    @DisplayName("GET /api/v1/fournisseurs/{id} - Doit retourner un fournisseur par son ID")
+    void testGetFournisseurById() throws Exception {
+        mockMvc.perform(get("/api/v1/fournisseurs/{id}", testFournisseur.getId())
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.id").value(testFournisseur.getId()))
+                .andExpect(jsonPath("$.societe").value("Fournisseur Test SARL"))
+                .andExpect(jsonPath("$.email").value("contact@test.com"));
+    }
+
     
 }
 
