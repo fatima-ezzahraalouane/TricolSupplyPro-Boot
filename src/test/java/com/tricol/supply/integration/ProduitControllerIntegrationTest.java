@@ -55,6 +55,16 @@ class ProduitControllerIntegrationTest {
         testProduit = produitRepository.save(testProduit);
     }
 
+    @Test
+    @DisplayName("GET /api/v1/produits - Doit retourner une liste de produits")
+    void testGetAllProduits() throws Exception {
+        mockMvc.perform(get("/api/v1/produits")
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.content").isArray())
+                .andExpect(jsonPath("$.content[0].nom").value("Ordinateur Portable HP"));
+    }
+
     
 }
 
