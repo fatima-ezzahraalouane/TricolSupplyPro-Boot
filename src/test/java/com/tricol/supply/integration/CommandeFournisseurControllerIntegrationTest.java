@@ -104,6 +104,17 @@ class CommandeFournisseurControllerIntegrationTest {
         commandeProduitRepository.save(commandeProduit);
     }
 
+    @Test
+    @DisplayName("GET /api/v1/commandes - Doit retourner une liste de commandes")
+    void testGetAllCommandes() throws Exception {
+        mockMvc.perform(get("/api/v1/commandes")
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.content").isArray())
+                .andExpect(jsonPath("$.content[0].id").value(testCommande.getId()))
+                .andExpect(jsonPath("$.content[0].statut").value("EN_ATTENTE"));
+    }
+
     
 }
 
