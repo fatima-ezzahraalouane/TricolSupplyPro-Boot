@@ -92,6 +92,35 @@ class ProduitControllerIntegrationTest {
                 "Le CUMP doit être égal au prix unitaire lors de la création avec stock > 0");
     }
 
+    @Test
+    @DisplayName("PUT /api/v1/produits/{id} - Doit recalculer le CUMP lors d'une augmentation de stock")
+    void testUpdateProduit_RecalculateCUMP() throws Exception {
+        ProduitDTO updateDTO = new ProduitDTO();
+        updateDTO.setNom("Ordinateur Portable HP Modifié");
+        updateDTO.setDescription("Ordinateur portable HP 15 pouces - Modifié");
+        updateDTO.setPrixUnitaire(new BigDecimal("6000.00"));
+        updateDTO.setCategorie("Informatique");
+        updateDTO.setStockActuel(75); // augmentation de 25 unités (50 -> 75)
+
+        mockMvc.perform(put("/api/v1/produits/{id}", testProduit.getId())
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(updateDTO)))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.stockActuel").value(75));
+
+        // verifier le calcul CUMP : (50 * 5500 + 25 * 6000) / 75 = 5666.67
+        Produit updatedProduit = produitRepository.findById(testProduit.getId())
+                .orElseThrow();
+        
+        BigDecimal expectedCump = new BigDecimal("50")
+                .multiply(new BigDecimal("5500"))
+                .add(new BigDecimal("25").multiply(new BigDecimal("6000")))
+                .divide(new BigDecimal("75"), 2, java.math.RoundingMode.HALF_UP);
+
+        assertEquals(expectedCump, updatedProduit.getCoutUnitaireMoyen(),
+                "Le CUMP doit être recalculé selon la formule CUMP");
+    }
+
     
 }
 
