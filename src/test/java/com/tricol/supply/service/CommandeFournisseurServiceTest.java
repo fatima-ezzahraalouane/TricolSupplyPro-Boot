@@ -113,6 +113,27 @@ class CommandeFournisseurServiceTest {
         detailDTO.setStatut(StatutCommande.EN_ATTENTE);
     }
 
+    @Test
+    @DisplayName("Doit retourner une page de commandes")
+    void testFindAll() {
+        // Given
+        Pageable pageable = PageRequest.of(0, 10);
+        List<CommandeFournisseur> commandes = Arrays.asList(commande);
+        Page<CommandeFournisseur> page = new PageImpl<>(commandes, pageable, 1);
+
+        when(commandeRepository.findAll(pageable)).thenReturn(page);
+        when(commandeMapper.toDTO(any(CommandeFournisseur.class))).thenReturn(commandeDTO);
+
+        // When
+        Page<CommandeFournisseurDTO> result = commandeService.findAll(pageable);
+
+        // Then
+        assertNotNull(result);
+        assertEquals(1, result.getTotalElements());
+        verify(commandeRepository, times(1)).findAll(pageable);
+        verify(commandeMapper, times(1)).toDTO(any(CommandeFournisseur.class));
+    }
+
     
 
 }
