@@ -38,6 +38,25 @@ class FournisseurControllerIntegrationTest {
 
     private Fournisseur testFournisseur;
 
+    @BeforeEach
+    void setUp() {
+        fournisseurRepository.deleteAll();
+        
+        testFournisseur = Fournisseur.builder()
+                .societe("Fournisseur Test SARL")
+                .adresse("123 Rue Test")
+                .contact("Mohamed Alami")
+                .email("contact@test.com")
+                .telephone("0612345678")
+                .ville("Casablanca")
+                .ice("001234567890001")
+                .createdAt(LocalDateTime.now())
+                .updatedAt(LocalDateTime.now())
+                .build();
+        
+        testFournisseur = fournisseurRepository.save(testFournisseur);
+    }
+
     
 }
 
