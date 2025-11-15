@@ -120,6 +120,20 @@ class MouvementStockServiceTest {
         verify(mouvementMapper, times(1)).toDTOList(mouvements);
     }
 
+    @Test
+    @DisplayName("Doit lever une exception si le produit n'existe pas")
+    void testFindByProduit_NotFound() {
+        // Given
+        Long produitId = 999L;
+        when(produitRepository.findById(produitId)).thenReturn(Optional.empty());
+
+        // When & Then
+        assertThrows(ResourceNotFoundException.class, () -> mouvementStockService.findByProduit(produitId));
+        verify(produitRepository, times(1)).findById(produitId);
+        verify(mouvementStockRepository, never()).findByProduit(any());
+        verify(mouvementMapper, never()).toDTOList(any());
+    }
+
     
 }
 
