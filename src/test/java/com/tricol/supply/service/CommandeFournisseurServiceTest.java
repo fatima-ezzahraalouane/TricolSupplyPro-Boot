@@ -164,6 +164,34 @@ class CommandeFournisseurServiceTest {
         verify(commandeRepository, times(1)).findById(id);
     }
 
+    @Test
+    @DisplayName("Doit créer une commande et réserver le stock")
+    void testCreate_Success() {
+        // Given
+        when(fournisseurRepository.findById(1L)).thenReturn(Optional.of(fournisseur));
+        when(produitRepository.findById(1L)).thenReturn(Optional.of(produit));
+        when(commandeRepository.save(any(CommandeFournisseur.class))).thenReturn(commande);
+        when(commandeProduitRepository.saveAll(any())).thenReturn(new ArrayList<>());
+        when(produitRepository.save(any(Produit.class))).thenReturn(produit);
+        when(commandeMapper.toDetailDTO(any(CommandeFournisseur.class))).thenReturn(detailDTO);
+
+        // When
+        CommandeFournisseurDetailDTO result = commandeService.create(commandeDTO);
+
+        // Then
+        assertNotNull(result);
+        assertEquals(new BigDecimal("275000.00"), result.getMontantTotal());
+        
+        // verifier que le stock a été reserve (diminué)
+        ArgumentCaptor<Produit> produitCaptor = ArgumentCaptor.forClass(Produit.class);
+        verify(produitRepository, times(1)).save(produitCaptor.capture());
+        Produit updatedProduit = produitCaptor.getValue();
+        assertEquals(50, updatedProduit.getStockActuel(), "Le stock doit être diminué de 50 unités");
+        
+        verify(commandeRepository, atLeastOnce()).save(any(CommandeFournisseur.class));
+        verify(commandeProduitRepository, times(1)).saveAll(any());
+    }
+
     
 
 }
