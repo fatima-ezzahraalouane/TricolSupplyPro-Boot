@@ -35,6 +35,33 @@ import static org.mockito.Mockito.*;
 @DisplayName("Tests unitaires pour CommandeFournisseurService")
 class CommandeFournisseurServiceTest {
 
+    @Mock
+    private CommandeFournisseurRepository commandeRepository;
+
+    @Mock
+    private FournisseurRepository fournisseurRepository;
+
+    @Mock
+    private ProduitRepository produitRepository;
+
+    @Mock
+    private CommandeProduitRepository commandeProduitRepository;
+
+    @Mock
+    private MouvementStockRepository mouvementStockRepository;
+
+    @Mock
+    private CommandeFournisseurMapper commandeMapper;
+
+    @InjectMocks
+    private CommandeFournisseurService commandeService;
+
+    private Fournisseur fournisseur;
+    private Produit produit;
+    private CommandeFournisseur commande;
+    private CommandeFournisseurDTO commandeDTO;
+    private CommandeFournisseurDetailDTO detailDTO;
+
     
 
 }
