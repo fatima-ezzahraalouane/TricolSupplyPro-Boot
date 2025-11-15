@@ -195,6 +195,16 @@ class CommandeFournisseurControllerIntegrationTest {
                 .andExpect(status().isBadRequest());
     }
 
+    @Test
+    @DisplayName("PATCH /api/v1/commandes/{id}/statut - Doit changer le statut d'une commande")
+    void testChangerStatut() throws Exception {
+        mockMvc.perform(patch("/api/v1/commandes/{id}/statut", testCommande.getId())
+                        .param("statut", "VALIDEE")
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.statut").value("VALIDEE"));
+    }
+
     
 }
 
