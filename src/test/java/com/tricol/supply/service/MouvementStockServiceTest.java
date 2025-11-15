@@ -54,6 +54,48 @@ class MouvementStockServiceTest {
     private MouvementStock mouvement;
     private MouvementStockDTO mouvementDTO;
 
+    @BeforeEach
+    void setUp() {
+        Fournisseur fournisseur = Fournisseur.builder()
+                .id(1L)
+                .societe("Fournisseur Test SARL")
+                .build();
+
+        produit = Produit.builder()
+                .id(1L)
+                .nom("Ordinateur Portable HP")
+                .prixUnitaire(new BigDecimal("5500.00"))
+                .stockActuel(100)
+                .build();
+
+        commande = CommandeFournisseur.builder()
+                .id(1L)
+                .dateCommande(LocalDateTime.now())
+                .statut(StatutCommande.LIVREE)
+                .fournisseur(fournisseur)
+                .build();
+
+        mouvement = MouvementStock.builder()
+                .id(1L)
+                .dateMouvement(LocalDateTime.now())
+                .typeMouvement(TypeMouvement.SORTIE)
+                .quantite(50)
+                .prixUnitaire(new BigDecimal("5500.00"))
+                .produit(produit)
+                .commandeFournisseur(commande)
+                .createdAt(LocalDateTime.now())
+                .build();
+
+        mouvementDTO = new MouvementStockDTO();
+        mouvementDTO.setId(1L);
+        mouvementDTO.setDateMouvement(LocalDateTime.now());
+        mouvementDTO.setTypeMouvement(TypeMouvement.SORTIE);
+        mouvementDTO.setQuantite(50);
+        mouvementDTO.setPrixUnitaire(new BigDecimal("5500.00"));
+        mouvementDTO.setProduitId(1L);
+        mouvementDTO.setCommandeFournisseurId(1L);
+    }
+
     
 }
 
