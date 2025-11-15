@@ -112,6 +112,14 @@ class MouvementStockControllerIntegrationTest {
                 .andExpect(jsonPath("$[0].produitId").value(testProduit.getId()));
     }
 
+    @Test
+    @DisplayName("GET /api/v1/mouvements/produit/{id} - Doit retourner 404 si produit inexistant")
+    void testGetMouvementsByProduit_NotFound() throws Exception {
+        mockMvc.perform(get("/api/v1/mouvements/produit/{produitId}", 999L)
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNotFound());
+    }
+
     
 }
 
