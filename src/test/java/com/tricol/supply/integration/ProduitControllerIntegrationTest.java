@@ -65,6 +65,33 @@ class ProduitControllerIntegrationTest {
                 .andExpect(jsonPath("$.content[0].nom").value("Ordinateur Portable HP"));
     }
 
+    @Test
+    @DisplayName("POST /api/v1/produits - Doit créer un produit avec calcul automatique du CUMP")
+    void testCreateProduit_WithAutomaticCUMP() throws Exception {
+        ProduitDTO newProduit = new ProduitDTO();
+        newProduit.setNom("Ordinateur Portable Dell");
+        newProduit.setDescription("Ordinateur portable Dell 17 pouces");
+        newProduit.setPrixUnitaire(new BigDecimal("6500.00"));
+        newProduit.setCategorie("Informatique");
+        newProduit.setStockActuel(100);
+
+        mockMvc.perform(post("/api/v1/produits")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(newProduit)))
+                .andExpect(status().isCreated())
+                .andExpect(jsonPath("$.id").exists())
+                .andExpect(jsonPath("$.nom").value("Ordinateur Portable Dell"))
+                .andExpect(jsonPath("$.coutUnitaireMoyen").value(6500.00))
+                .andExpect(jsonPath("$.stockActuel").value(100));
+
+        Produit savedProduit = produitRepository.findAll().stream()
+                .filter(p -> p.getNom().equals("Ordinateur Portable Dell"))
+                .findFirst()
+                .orElseThrow();
+        assertEquals(new BigDecimal("6500.00"), savedProduit.getCoutUnitaireMoyen(),
+                "Le CUMP doit être égal au prix unitaire lors de la création avec stock > 0");
+    }
+
     
 }
 
