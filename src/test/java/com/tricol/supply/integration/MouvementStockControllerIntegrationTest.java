@@ -132,6 +132,14 @@ class MouvementStockControllerIntegrationTest {
                 .andExpect(jsonPath("$[0].typeMouvement").value("SORTIE"));
     }
 
+    @Test
+    @DisplayName("GET /api/v1/mouvements/commande/{id} - Doit retourner 404 si commande inexistante")
+    void testGetMouvementsByCommande_NotFound() throws Exception {
+        mockMvc.perform(get("/api/v1/mouvements/commande/{commandeId}", 999L)
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNotFound());
+    }
+
     
 }
 
