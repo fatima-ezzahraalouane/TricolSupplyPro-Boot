@@ -268,7 +268,26 @@ class CommandeFournisseurServiceTest {
         assertEquals(50, mouvement.getQuantite());
     }
 
-    
+    @Test
+    @DisplayName("Doit retourner les commandes d'un fournisseur")
+    void testFindByFournisseur() {
+        // Given
+        Long fournisseurId = 1L;
+        List<CommandeFournisseur> commandes = Arrays.asList(commande);
+        
+        when(fournisseurRepository.findById(fournisseurId)).thenReturn(Optional.of(fournisseur));
+        when(commandeRepository.findByFournisseur(fournisseur)).thenReturn(commandes);
+        when(commandeMapper.toDTO(any(CommandeFournisseur.class))).thenReturn(commandeDTO);
+
+        // When
+        List<CommandeFournisseurDTO> result = commandeService.findByFournisseur(fournisseurId);
+
+        // Then
+        assertNotNull(result);
+        assertEquals(1, result.size());
+        verify(fournisseurRepository, times(1)).findById(fournisseurId);
+        verify(commandeRepository, times(1)).findByFournisseur(fournisseur);
+    }
 
 }
 
