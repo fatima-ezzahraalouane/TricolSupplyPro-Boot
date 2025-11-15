@@ -236,6 +236,38 @@ class CommandeFournisseurServiceTest {
         assertEquals(nouveauStatut, commandeCaptor.getValue().getStatut());
     }
 
+    @Test
+    @DisplayName("Doit créer des mouvements de stock lors de la livraison")
+    void testChangerStatut_ToLivree_CreateMouvements() {
+        // Given
+        Long id = 1L;
+        
+        CommandeProduit commandeProduit = CommandeProduit.builder()
+                .commande(commande)
+                .produit(produit)
+                .quantite(50)
+                .prixUnitaireCommande(new BigDecimal("5500.00"))
+                .build();
+        
+        commande.setCommandeProduits(Arrays.asList(commandeProduit));
+        
+        when(commandeRepository.findById(id)).thenReturn(Optional.of(commande));
+        when(commandeRepository.save(any(CommandeFournisseur.class))).thenReturn(commande);
+        when(mouvementStockRepository.save(any(MouvementStock.class))).thenReturn(new MouvementStock());
+        when(commandeMapper.toDetailDTO(any(CommandeFournisseur.class))).thenReturn(detailDTO);
+
+        // When
+        commandeService.changerStatut(id, StatutCommande.LIVREE);
+
+        // Then
+        verify(mouvementStockRepository, times(1)).save(any(MouvementStock.class));
+        ArgumentCaptor<MouvementStock> mouvementCaptor = ArgumentCaptor.forClass(MouvementStock.class);
+        verify(mouvementStockRepository).save(mouvementCaptor.capture());
+        MouvementStock mouvement = mouvementCaptor.getValue();
+        assertEquals(TypeMouvement.SORTIE, mouvement.getTypeMouvement());
+        assertEquals(50, mouvement.getQuantite());
+    }
+
     
 
 }
