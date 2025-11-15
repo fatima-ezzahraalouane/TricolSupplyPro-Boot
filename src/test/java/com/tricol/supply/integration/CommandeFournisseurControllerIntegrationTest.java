@@ -145,6 +145,36 @@ class CommandeFournisseurControllerIntegrationTest {
                 .andExpect(jsonPath("$[0].statut").value("EN_ATTENTE"));
     }
 
+    @Test
+    @DisplayName("POST /api/v1/commandes - Doit créer une nouvelle commande et réserver le stock")
+    void testCreateCommande() throws Exception {
+        CommandeFournisseurDTO newCommande = new CommandeFournisseurDTO();
+        newCommande.setFournisseurId(testFournisseur.getId());
+        newCommande.setStatut(StatutCommande.EN_ATTENTE);
+        
+        ProduitCommandeDTO produitCommande = new ProduitCommandeDTO();
+        produitCommande.setProduitId(testProduit.getId());
+        produitCommande.setQuantite(20);
+        produitCommande.setPrixUnitaireCommande(new BigDecimal("5500.00"));
+        
+        newCommande.setProduits(Arrays.asList(produitCommande));
+
+        int stockAvant = testProduit.getStockActuel();
+
+        mockMvc.perform(post("/api/v1/commandes")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(newCommande)))
+                .andExpect(status().isCreated())
+                .andExpect(jsonPath("$.id").exists())
+                .andExpect(jsonPath("$.fournisseur.id").value(testFournisseur.getId()))
+                .andExpect(jsonPath("$.montantTotal").value(110000.00));
+
+        // verifier que le stock a été reserve (diminué)
+        Produit updatedProduit = produitRepository.findById(testProduit.getId()).orElseThrow();
+        assertEquals(stockAvant - 20, updatedProduit.getStockActuel(),
+                "Le stock doit être diminué de 20 unités");
+    }
+
     
 }
 
