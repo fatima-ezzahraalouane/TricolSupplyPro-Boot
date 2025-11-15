@@ -659,6 +659,10 @@ Le rapport JaCoCo fournit une analyse détaillée de la couverture de code :
 | **Methods** | Pourcentage de méthodes testées | ≥ 50% | **74%** (289 / 391) ✅ |
 | **Classes** | Pourcentage de classes testées | 100% | **100%** (35 / 35) ✅ |
 
+**Aperçu visuel** :
+
+![Rapport de couverture JaCoCo](images/jacoco-report.png)
+
 **Interprétation** :
 
 - 🟢 **≥ 80%** : Excellente couverture
