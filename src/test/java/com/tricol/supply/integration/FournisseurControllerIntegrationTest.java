@@ -108,6 +108,26 @@ class FournisseurControllerIntegrationTest {
                 .andExpect(jsonPath("$.email").value("nouveau@test.com"));
     }
 
+    @Test
+    @DisplayName("PUT /api/v1/fournisseurs/{id} - Doit mettre à jour un fournisseur existant")
+    void testUpdateFournisseur() throws Exception {
+        FournisseurDTO updateDTO = new FournisseurDTO();
+        updateDTO.setSociete("Fournisseur Modifié SARL");
+        updateDTO.setAdresse("789 Rue Modifiée");
+        updateDTO.setContact("Ahmed Benali");
+        updateDTO.setEmail("modifie@test.com");
+        updateDTO.setTelephone("0611111111");
+        updateDTO.setVille("Marrakech");
+        updateDTO.setIce("001234567890001");
+
+        mockMvc.perform(put("/api/v1/fournisseurs/{id}", testFournisseur.getId())
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(updateDTO)))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.societe").value("Fournisseur Modifié SARL"))
+                .andExpect(jsonPath("$.ville").value("Marrakech"));
+    }
+
     
 }
 
