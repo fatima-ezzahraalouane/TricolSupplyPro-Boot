@@ -57,6 +57,17 @@ class FournisseurControllerIntegrationTest {
         testFournisseur = fournisseurRepository.save(testFournisseur);
     }
 
+    @Test
+    @DisplayName("GET /api/v1/fournisseurs - Doit retourner une liste de fournisseurs")
+    void testGetAllFournisseurs() throws Exception {
+        mockMvc.perform(get("/api/v1/fournisseurs")
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.content").isArray())
+                .andExpect(jsonPath("$.content[0].societe").value("Fournisseur Test SARL"))
+                .andExpect(jsonPath("$.content[0].email").value("contact@test.com"));
+    }
+
     
 }
 
