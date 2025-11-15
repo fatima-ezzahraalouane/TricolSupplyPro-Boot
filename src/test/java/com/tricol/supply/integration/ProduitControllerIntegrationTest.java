@@ -28,6 +28,17 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @DisplayName("Tests d'intégration pour ProduitController - incluant calcul CUMP")
 class ProduitControllerIntegrationTest {
 
+    @Autowired
+    private MockMvc mockMvc;
+
+    @Autowired
+    private ProduitRepository produitRepository;
+
+    @Autowired
+    private ObjectMapper objectMapper;
+
+    private Produit testProduit;
+
     
 }
 
