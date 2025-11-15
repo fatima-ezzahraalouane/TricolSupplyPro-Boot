@@ -126,6 +126,14 @@ class CommandeFournisseurControllerIntegrationTest {
                 .andExpect(jsonPath("$.montantTotal").value(275000.00));
     }
 
+    @Test
+    @DisplayName("GET /api/v1/commandes/{id} - Doit retourner 404 si commande inexistante")
+    void testGetCommandeById_NotFound() throws Exception {
+        mockMvc.perform(get("/api/v1/commandes/{id}", 999L)
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNotFound());
+    }
+
     
 }
 
