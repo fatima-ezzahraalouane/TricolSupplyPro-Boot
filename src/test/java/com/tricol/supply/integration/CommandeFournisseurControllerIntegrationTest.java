@@ -115,6 +115,17 @@ class CommandeFournisseurControllerIntegrationTest {
                 .andExpect(jsonPath("$.content[0].statut").value("EN_ATTENTE"));
     }
 
+    @Test
+    @DisplayName("GET /api/v1/commandes/{id} - Doit retourner une commande par son ID")
+    void testGetCommandeById() throws Exception {
+        mockMvc.perform(get("/api/v1/commandes/{id}", testCommande.getId())
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.id").value(testCommande.getId()))
+                .andExpect(jsonPath("$.fournisseur.id").value(testFournisseur.getId()))
+                .andExpect(jsonPath("$.montantTotal").value(275000.00));
+    }
+
     
 }
 
