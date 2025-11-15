@@ -175,6 +175,26 @@ class CommandeFournisseurControllerIntegrationTest {
                 "Le stock doit être diminué de 20 unités");
     }
 
+    @Test
+    @DisplayName("POST /api/v1/commandes - Doit retourner une erreur si stock insuffisant")
+    void testCreateCommande_InsufficientStock() throws Exception {
+        CommandeFournisseurDTO newCommande = new CommandeFournisseurDTO();
+        newCommande.setFournisseurId(testFournisseur.getId());
+        newCommande.setStatut(StatutCommande.EN_ATTENTE);
+        
+        ProduitCommandeDTO produitCommande = new ProduitCommandeDTO();
+        produitCommande.setProduitId(testProduit.getId());
+        produitCommande.setQuantite(200); // stock insuffisant (disponible: 100)
+        produitCommande.setPrixUnitaireCommande(new BigDecimal("5500.00"));
+        
+        newCommande.setProduits(Arrays.asList(produitCommande));
+
+        mockMvc.perform(post("/api/v1/commandes")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(newCommande)))
+                .andExpect(status().isBadRequest());
+    }
+
     
 }
 
