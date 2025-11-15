@@ -28,6 +28,7 @@
 - [Base de données](#-base-de-données)
 - [Configuration](#-configuration)
 - [Règles métier](#-règles-métier)
+- [Tests](#-tests)
 
 ---
 
@@ -538,6 +539,183 @@ Où :
 
 ---
 
+## 🧪 Tests
+
+### 📋 Stratégie de test
+
+Le projet utilise une **stratégie de test en deux niveaux** pour garantir la qualité et la fiabilité du code :
+
+#### 1. Tests unitaires (`src/test/java/com/tricol/supply/service/`)
+
+Les tests unitaires vérifient la logique métier isolée des dépendances externes :
+
+- **Framework** : JUnit 5 + Mockito
+- **Objectif** : Tester la logique métier des services de manière isolée
+- **Technique** : Mocking des repositories et dépendances
+- **Couverture** : Tous les services métier (Fournisseur, Produit, Commande, MouvementStock)
+
+**Tests unitaires disponibles** :
+- ✅ `FournisseurServiceTest.java` - Tests CRUD et validation
+- ✅ `ProduitServiceTest.java` - Tests CRUD, stock et calcul CUMP
+- ✅ `CommandeFournisseurServiceTest.java` - Tests création, modification, statuts
+- ✅ `MouvementStockServiceTest.java` - Tests création et historique
+
+#### 2. Tests d'intégration (`src/test/java/com/tricol/supply/integration/`)
+
+Les tests d'intégration vérifient le comportement end-to-end de l'API REST :
+
+- **Framework** : Spring Boot Test + MockMvc
+- **Base de données** : H2 (en mémoire) pour l'isolation
+- **Objectif** : Tester les endpoints REST, la sérialisation JSON et l'intégration complète
+- **Profil** : Utilise le profil `test` défini dans `application-test.properties`
+
+**Tests d'intégration disponibles** :
+- ✅ `FournisseurControllerIntegrationTest.java` - Tests des endpoints `/api/v1/fournisseurs`
+- ✅ `ProduitControllerIntegrationTest.java` - Tests des endpoints `/api/v1/produits` (incluant CUMP)
+- ✅ `CommandeFournisseurControllerIntegrationTest.java` - Tests des endpoints `/api/v1/commandes`
+- ✅ `MouvementStockControllerIntegrationTest.java` - Tests des endpoints `/api/v1/mouvements`
+
+#### 3. Tests d'intégration API (Postman)
+
+Une collection Postman complète permet de tester manuellement tous les endpoints de l'API :
+
+- **Fichier** : `TricolSupplyPro.postman_collection.json`
+- **Couverture** : Tous les endpoints CRUD + opérations métier
+- **Utilisation** : Import dans Postman pour tests manuels ou automatisés
+
+### 🚀 Commandes pour exécuter les tests
+
+#### Exécuter tous les tests
+
+```bash
+# Avec Maven Wrapper (recommandé)
+./mvnw test
+
+# Ou avec Maven installé
+mvn test
+```
+
+#### Exécuter uniquement les tests unitaires
+
+```bash
+./mvnw test -Dtest=*ServiceTest
+```
+
+#### Exécuter uniquement les tests d'intégration
+
+```bash
+./mvnw test -Dtest=*IntegrationTest
+```
+
+#### Générer le rapport de couverture JaCoCo
+
+```bash
+# Exécuter les tests et générer le rapport
+./mvnw test jacoco:report
+
+# Nettoyer, tester et générer le rapport
+./mvnw clean test jacoco:report
+```
+
+**Emplacement du rapport** : `target/site/jacoco/index.html`
+
+Ouvrez ce fichier dans votre navigateur pour visualiser le rapport de couverture interactif.
+
+### 📊 Interprétation des résultats
+
+#### Résultats des tests
+
+Après l'exécution, vous verrez dans le terminal :
+
+```
+[INFO] Tests run: 45, Failures: 0, Errors: 0, Skipped: 0
+[INFO] 
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD SUCCESS
+[INFO] ------------------------------------------------------------------------
+```
+
+**Indicateurs** :
+- ✅ **Tests run** : Nombre total de tests exécutés
+- ❌ **Failures** : Tests qui ont échoué (devrait être 0)
+- ⚠️ **Errors** : Erreurs d'exécution (devrait être 0)
+- ⏭️ **Skipped** : Tests ignorés (normal si certains tests sont désactivés)
+
+#### Rapport de couverture JaCoCo
+
+Le rapport JaCoCo fournit une analyse détaillée de la couverture de code :
+
+**Métriques principales** :
+
+| Métrique | Description | Objectif |
+|----------|-------------|----------|
+| **Instructions** | Pourcentage d'instructions exécutées | ≥ 50% |
+| **Branches** | Pourcentage de branches testées (if/else, switch) | ≥ 50% |
+| **Lines** | Pourcentage de lignes de code exécutées | ≥ 50% |
+| **Methods** | Pourcentage de méthodes testées | ≥ 50% |
+| **Classes** | Pourcentage de classes testées | 100% |
+
+**Interprétation** :
+
+- 🟢 **≥ 80%** : Excellente couverture
+- 🟡 **50-79%** : Couverture acceptable (seuil minimum configuré)
+- 🔴 **< 50%** : Couverture insuffisante (le build échouera)
+
+**Navigation dans le rapport** :
+
+1. **Vue d'ensemble** : Page d'accueil avec le pourcentage global de couverture
+2. **Par package** : Détails de couverture par package (`com.tricol.supply.service`, `com.tricol.supply.controller`, etc.)
+3. **Par classe** : Couverture ligne par ligne avec code source coloré :
+   - 🟢 **Vert** : Lignes couvertes par les tests
+   - 🔴 **Rouge** : Lignes non couvertes
+   - 🟡 **Jaune** : Branches partiellement couvertes
+
+**Exemple d'interprétation** :
+
+```
+Total: 72% de couverture
+├── service/ : 85% ✅
+├── controller/ : 78% ✅
+├── repository/ : 45% ⚠️ (à améliorer)
+└── mapper/ : 90% ✅
+```
+
+**Actions recommandées** :
+- ✅ Couverture ≥ 50% : Acceptable, continuer à maintenir
+- ⚠️ Couverture < 50% : Ajouter des tests pour les classes non couvertes
+- 🔍 Analyser les lignes rouges pour identifier les cas non testés
+
+### 📮 Collection Postman
+
+Une collection Postman complète est disponible pour tester tous les endpoints de l'API :
+
+📁 **Fichier** : `TricolSupplyPro.postman_collection.json`
+
+**Comment l'utiliser** :
+1. Ouvrir Postman
+2. Cliquer sur **Import**
+3. Sélectionner le fichier `TricolSupplyPro.postman_collection.json`
+4. La collection contient tous les endpoints avec des exemples de requêtes
+
+**Endpoints inclus** :
+- ✅ **Fournisseurs** : CRUD complet (5 requêtes)
+- ✅ **Produits** : CRUD complet (5 requêtes)
+- ✅ **Commandes Fournisseurs** : CRUD + changement de statut (7 requêtes)
+- ✅ **Mouvements de Stock** : Consultation par produit/commande (2 requêtes)
+
+**Variable d'environnement** :
+- `baseUrl` : `http://localhost:8080/api/v1` (modifiable selon votre configuration)
+
+**Vérification de la collection** :
+✅ La collection Postman est **correcte et complète**. Elle contient :
+- Tous les endpoints documentés dans l'API
+- Des exemples de requêtes valides avec données de test
+- Les méthodes HTTP appropriées (GET, POST, PUT, DELETE, PATCH)
+- Les en-têtes nécessaires (Content-Type: application/json)
+- La variable d'environnement `baseUrl` pour faciliter les tests
+
+---
+
 ## ✅ Validation des données
 
 ### 🔒 Contraintes de validation
@@ -579,27 +757,6 @@ L'API retourne des réponses JSON structurées :
 - `400` : Erreur de validation
 - `404` : Ressource non trouvée
 - `500` : Erreur serveur
-
-### 📮 Collection Postman
-
-Une collection Postman complète est disponible pour tester tous les endpoints de l'API :
-
-📁 **Fichier** : `TricolSupplyPro.postman_collection.json`
-
-**Comment l'utiliser** :
-1. Ouvrir Postman
-2. Cliquer sur **Import**
-3. Sélectionner le fichier `TricolSupplyPro.postman_collection.json`
-4. La collection contient tous les endpoints avec des exemples de requêtes
-
-**Endpoints inclus** :
-- ✅ **Fournisseurs** : CRUD complet (5 requêtes)
-- ✅ **Produits** : CRUD complet (5 requêtes)
-- ✅ **Commandes Fournisseurs** : CRUD + changement de statut (7 requêtes)
-- ✅ **Mouvements de Stock** : Consultation par produit/commande (2 requêtes)
-
-**Variable d'environnement** :
-- `baseUrl` : `http://localhost:8080/api/v1` (modifiable selon votre configuration)
 
 **📋 Valeurs des Enums** :
 - Consultez le fichier `API_ENUMS.md` pour la liste complète des valeurs acceptées pour `StatutCommande` et `TypeMouvement`
