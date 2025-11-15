@@ -62,6 +62,57 @@ class CommandeFournisseurServiceTest {
     private CommandeFournisseurDTO commandeDTO;
     private CommandeFournisseurDetailDTO detailDTO;
 
+    @BeforeEach
+    void setUp() {
+        fournisseur = Fournisseur.builder()
+                .id(1L)
+                .societe("Fournisseur Test SARL")
+                .adresse("123 Rue Test")
+                .contact("Mohamed Alami")
+                .email("contact@test.com")
+                .telephone("0612345678")
+                .ville("Casablanca")
+                .ice("001234567890001")
+                .createdAt(LocalDateTime.now())
+                .build();
+
+        produit = Produit.builder()
+                .id(1L)
+                .nom("Ordinateur Portable HP")
+                .prixUnitaire(new BigDecimal("5500.00"))
+                .stockActuel(100)
+                .coutUnitaireMoyen(new BigDecimal("5500.00"))
+                .build();
+
+        commande = CommandeFournisseur.builder()
+                .id(1L)
+                .dateCommande(LocalDateTime.now())
+                .statut(StatutCommande.EN_ATTENTE)
+                .fournisseur(fournisseur)
+                .montantTotal(new BigDecimal("275000.00"))
+                .build();
+
+        commandeDTO = new CommandeFournisseurDTO();
+        commandeDTO.setFournisseurId(1L);
+        commandeDTO.setStatut(StatutCommande.EN_ATTENTE);
+        
+        ProduitCommandeDTO produitCommandeDTO = new ProduitCommandeDTO();
+        produitCommandeDTO.setProduitId(1L);
+        produitCommandeDTO.setQuantite(50);
+        produitCommandeDTO.setPrixUnitaireCommande(new BigDecimal("5500.00"));
+        commandeDTO.setProduits(Arrays.asList(produitCommandeDTO));
+
+        detailDTO = new CommandeFournisseurDetailDTO();
+        detailDTO.setId(1L);
+        
+        FournisseurDTO fournisseurDTO = new FournisseurDTO();
+        fournisseurDTO.setId(1L);
+        detailDTO.setFournisseur(fournisseurDTO);
+        
+        detailDTO.setMontantTotal(new BigDecimal("275000.00"));
+        detailDTO.setStatut(StatutCommande.EN_ATTENTE);
+    }
+
     
 
 }
