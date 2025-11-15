@@ -39,6 +39,22 @@ class ProduitControllerIntegrationTest {
 
     private Produit testProduit;
 
+    @BeforeEach
+    void setUp() {
+        produitRepository.deleteAll();
+        
+        testProduit = Produit.builder()
+                .nom("Ordinateur Portable HP")
+                .description("Ordinateur portable HP 15 pouces")
+                .prixUnitaire(new BigDecimal("5500.00"))
+                .categorie("Informatique")
+                .stockActuel(50)
+                .coutUnitaireMoyen(new BigDecimal("5500.00"))
+                .build();
+        
+        testProduit = produitRepository.save(testProduit);
+    }
+
     
 }
 
