@@ -99,6 +99,19 @@ class MouvementStockControllerIntegrationTest {
         testMouvement = mouvementStockRepository.save(testMouvement);
     }
 
+    @Test
+    @DisplayName("GET /api/v1/mouvements/produit/{id} - Doit retourner les mouvements d'un produit")
+    void testGetMouvementsByProduit() throws Exception {
+        mockMvc.perform(get("/api/v1/mouvements/produit/{produitId}", testProduit.getId())
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$").isArray())
+                .andExpect(jsonPath("$[0].id").value(testMouvement.getId()))
+                .andExpect(jsonPath("$[0].typeMouvement").value("SORTIE"))
+                .andExpect(jsonPath("$[0].quantite").value(50))
+                .andExpect(jsonPath("$[0].produitId").value(testProduit.getId()));
+    }
+
     
 }
 
