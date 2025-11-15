@@ -152,6 +152,18 @@ class CommandeFournisseurServiceTest {
         verify(commandeMapper, times(1)).toDetailDTO(commande);
     }
 
+    @Test
+    @DisplayName("Doit lever une exception quand la commande n'existe pas")
+    void testFindById_NotFound() {
+        // Given
+        Long id = 999L;
+        when(commandeRepository.findById(id)).thenReturn(Optional.empty());
+
+        // When & Then
+        assertThrows(ResourceNotFoundException.class, () -> commandeService.findById(id));
+        verify(commandeRepository, times(1)).findById(id);
+    }
+
     
 
 }
