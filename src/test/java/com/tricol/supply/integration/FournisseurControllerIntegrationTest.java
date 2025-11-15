@@ -27,6 +27,17 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @DisplayName("Tests d'intégration pour FournisseurController")
 class FournisseurControllerIntegrationTest {
 
+    @Autowired
+    private MockMvc mockMvc;
+
+    @Autowired
+    private FournisseurRepository fournisseurRepository;
+
+    @Autowired
+    private ObjectMapper objectMapper;
+
+    private Fournisseur testFournisseur;
+
     
 }
 
