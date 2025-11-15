@@ -79,6 +79,14 @@ class FournisseurControllerIntegrationTest {
                 .andExpect(jsonPath("$.email").value("contact@test.com"));
     }
 
+    @Test
+    @DisplayName("GET /api/v1/fournisseurs/{id} - Doit retourner 404 si fournisseur inexistant")
+    void testGetFournisseurById_NotFound() throws Exception {
+        mockMvc.perform(get("/api/v1/fournisseurs/{id}", 999L)
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNotFound());
+    }
+
     
 }
 
