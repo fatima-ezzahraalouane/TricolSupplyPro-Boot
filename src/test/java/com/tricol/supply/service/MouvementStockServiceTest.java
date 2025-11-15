@@ -155,6 +155,30 @@ class MouvementStockServiceTest {
         verify(mouvementStockRepository, times(1)).findByProduit(produit);
     }
 
+    @Test
+    @DisplayName("Doit retourner les mouvements d'une commande existante")
+    void testFindByCommande_Success() {
+        // Given
+        Long commandeId = 1L;
+        List<MouvementStock> mouvements = Arrays.asList(mouvement);
+        
+        when(commandeRepository.findById(commandeId)).thenReturn(Optional.of(commande));
+        when(mouvementStockRepository.findByCommandeFournisseur(commande)).thenReturn(mouvements);
+        when(mouvementMapper.toDTOList(mouvements)).thenReturn(Arrays.asList(mouvementDTO));
+
+        // When
+        List<MouvementStockDTO> result = mouvementStockService.findByCommande(commandeId);
+
+        // Then
+        assertNotNull(result);
+        assertEquals(1, result.size());
+        assertEquals(mouvementDTO.getId(), result.get(0).getId());
+        assertEquals(mouvementDTO.getCommandeFournisseurId(), result.get(0).getCommandeFournisseurId());
+        verify(commandeRepository, times(1)).findById(commandeId);
+        verify(mouvementStockRepository, times(1)).findByCommandeFournisseur(commande);
+        verify(mouvementMapper, times(1)).toDTOList(mouvements);
+    }
+
     
 }
 
