@@ -120,6 +120,18 @@ class MouvementStockControllerIntegrationTest {
                 .andExpect(status().isNotFound());
     }
 
+    @Test
+    @DisplayName("GET /api/v1/mouvements/commande/{id} - Doit retourner les mouvements d'une commande")
+    void testGetMouvementsByCommande() throws Exception {
+        mockMvc.perform(get("/api/v1/mouvements/commande/{commandeId}", testCommande.getId())
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$").isArray())
+                .andExpect(jsonPath("$[0].id").value(testMouvement.getId()))
+                .andExpect(jsonPath("$[0].commandeFournisseurId").value(testCommande.getId()))
+                .andExpect(jsonPath("$[0].typeMouvement").value("SORTIE"));
+    }
+
     
 }
 
