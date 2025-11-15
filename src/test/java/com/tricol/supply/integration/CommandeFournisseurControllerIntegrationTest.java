@@ -205,7 +205,18 @@ class CommandeFournisseurControllerIntegrationTest {
                 .andExpect(jsonPath("$.statut").value("VALIDEE"));
     }
 
-    
+    @Test
+    @DisplayName("DELETE /api/v1/commandes/{id} - Doit supprimer une commande en attente")
+    void testDeleteCommande_EnAttente() throws Exception {
+        mockMvc.perform(delete("/api/v1/commandes/{id}", testCommande.getId())
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.message").value("Commande supprimée avec succès"));
+
+        // verifier que la commande n'existe plus
+        mockMvc.perform(get("/api/v1/commandes/{id}", testCommande.getId()))
+                .andExpect(status().isNotFound());
+    }
 }
 
 
