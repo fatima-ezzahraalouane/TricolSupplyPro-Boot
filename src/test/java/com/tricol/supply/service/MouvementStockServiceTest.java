@@ -134,6 +134,27 @@ class MouvementStockServiceTest {
         verify(mouvementMapper, never()).toDTOList(any());
     }
 
+    @Test
+    @DisplayName("Doit retourner une liste vide si aucun mouvement pour le produit")
+    void testFindByProduit_EmptyList() {
+        // Given
+        Long produitId = 1L;
+        List<MouvementStock> mouvementsVides = Arrays.asList();
+        
+        when(produitRepository.findById(produitId)).thenReturn(Optional.of(produit));
+        when(mouvementStockRepository.findByProduit(produit)).thenReturn(mouvementsVides);
+        when(mouvementMapper.toDTOList(mouvementsVides)).thenReturn(Arrays.asList());
+
+        // When
+        List<MouvementStockDTO> result = mouvementStockService.findByProduit(produitId);
+
+        // Then
+        assertNotNull(result);
+        assertTrue(result.isEmpty());
+        verify(produitRepository, times(1)).findById(produitId);
+        verify(mouvementStockRepository, times(1)).findByProduit(produit);
+    }
+
     
 }
 
