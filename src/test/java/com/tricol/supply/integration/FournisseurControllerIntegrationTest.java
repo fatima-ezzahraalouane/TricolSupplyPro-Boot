@@ -128,6 +128,17 @@ class FournisseurControllerIntegrationTest {
                 .andExpect(jsonPath("$.ville").value("Marrakech"));
     }
 
-    
+    @Test
+    @DisplayName("DELETE /api/v1/fournisseurs/{id} - Doit supprimer un fournisseur")
+    void testDeleteFournisseur() throws Exception {
+        mockMvc.perform(delete("/api/v1/fournisseurs/{id}", testFournisseur.getId())
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.message").value("Fournisseur supprimé avec succès"));
+
+        // verifier que le fournisseur n'existe plus
+        mockMvc.perform(get("/api/v1/fournisseurs/{id}", testFournisseur.getId()))
+                .andExpect(status().isNotFound());
+    }
 }
 
