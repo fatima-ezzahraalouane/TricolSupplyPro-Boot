@@ -47,6 +47,58 @@ class MouvementStockControllerIntegrationTest {
     private CommandeFournisseur testCommande;
     private MouvementStock testMouvement;
 
+    @BeforeEach
+    void setUp() {
+        mouvementStockRepository.deleteAll();
+        commandeRepository.deleteAll();
+        produitRepository.deleteAll();
+        fournisseurRepository.deleteAll();
+
+        // creer un fournisseur
+        Fournisseur fournisseur = Fournisseur.builder()
+                .societe("Fournisseur Test SARL")
+                .adresse("123 Rue Test")
+                .contact("Mohamed Alami")
+                .email("contact@test.com")
+                .telephone("0612345678")
+                .ville("Casablanca")
+                .ice("001234567890001")
+                .createdAt(LocalDateTime.now())
+                .build();
+        fournisseur = fournisseurRepository.save(fournisseur);
+
+        // creer un produit
+        testProduit = Produit.builder()
+                .nom("Ordinateur Portable HP")
+                .description("Ordinateur portable HP 15 pouces")
+                .prixUnitaire(new BigDecimal("5500.00"))
+                .categorie("Informatique")
+                .stockActuel(100)
+                .coutUnitaireMoyen(new BigDecimal("5500.00"))
+                .build();
+        testProduit = produitRepository.save(testProduit);
+
+        // creer une commande
+        testCommande = CommandeFournisseur.builder()
+                .dateCommande(LocalDateTime.now())
+                .statut(StatutCommande.LIVREE)
+                .fournisseur(fournisseur)
+                .montantTotal(new BigDecimal("275000.00"))
+                .build();
+        testCommande = commandeRepository.save(testCommande);
+
+        // creer un mouvement de stock
+        testMouvement = MouvementStock.builder()
+                .dateMouvement(LocalDateTime.now())
+                .typeMouvement(TypeMouvement.SORTIE)
+                .quantite(50)
+                .prixUnitaire(new BigDecimal("5500.00"))
+                .produit(testProduit)
+                .commandeFournisseur(testCommande)
+                .build();
+        testMouvement = mouvementStockRepository.save(testMouvement);
+    }
+
     
 }
 
