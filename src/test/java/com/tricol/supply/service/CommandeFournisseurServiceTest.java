@@ -192,6 +192,26 @@ class CommandeFournisseurServiceTest {
         verify(commandeProduitRepository, times(1)).saveAll(any());
     }
 
+    @Test
+    @DisplayName("Doit lever une exception si stock insuffisant")
+    void testCreate_InsufficientStock() {
+        // Given
+        produit.setStockActuel(30); // stock insuffisant (demande de 50)
+        
+        when(fournisseurRepository.findById(1L)).thenReturn(Optional.of(fournisseur));
+        when(produitRepository.findById(1L)).thenReturn(Optional.of(produit));
+        when(commandeRepository.save(any(CommandeFournisseur.class))).thenReturn(commande);
+
+        // When & Then
+        IllegalArgumentException exception = assertThrows(
+                IllegalArgumentException.class, 
+                () -> commandeService.create(commandeDTO)
+        );
+        
+        assertTrue(exception.getMessage().contains("Stock insuffisant"));
+        verify(produitRepository, never()).save(any(Produit.class));
+    }
+
     
 
 }
