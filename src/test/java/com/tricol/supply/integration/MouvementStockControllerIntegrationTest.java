@@ -28,6 +28,25 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @DisplayName("Tests d'intégration pour MouvementStockController")
 class MouvementStockControllerIntegrationTest {
 
+    @Autowired
+    private MockMvc mockMvc;
+
+    @Autowired
+    private MouvementStockRepository mouvementStockRepository;
+
+    @Autowired
+    private ProduitRepository produitRepository;
+
+    @Autowired
+    private FournisseurRepository fournisseurRepository;
+
+    @Autowired
+    private CommandeFournisseurRepository commandeRepository;
+
+    private Produit testProduit;
+    private CommandeFournisseur testCommande;
+    private MouvementStock testMouvement;
+
     
 }
 
