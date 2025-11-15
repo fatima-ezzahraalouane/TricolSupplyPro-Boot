@@ -179,6 +179,20 @@ class MouvementStockServiceTest {
         verify(mouvementMapper, times(1)).toDTOList(mouvements);
     }
 
+    @Test
+    @DisplayName("Doit lever une exception si la commande n'existe pas")
+    void testFindByCommande_NotFound() {
+        // Given
+        Long commandeId = 999L;
+        when(commandeRepository.findById(commandeId)).thenReturn(Optional.empty());
+
+        // When & Then
+        assertThrows(ResourceNotFoundException.class, () -> mouvementStockService.findByCommande(commandeId));
+        verify(commandeRepository, times(1)).findById(commandeId);
+        verify(mouvementStockRepository, never()).findByCommandeFournisseur(any());
+        verify(mouvementMapper, never()).toDTOList(any());
+    }
+
     
 }
 
