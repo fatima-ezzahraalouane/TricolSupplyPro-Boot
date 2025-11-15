@@ -87,6 +87,27 @@ class FournisseurControllerIntegrationTest {
                 .andExpect(status().isNotFound());
     }
 
+    @Test
+    @DisplayName("POST /api/v1/fournisseurs - Doit créer un nouveau fournisseur")
+    void testCreateFournisseur() throws Exception {
+        FournisseurDTO newFournisseur = new FournisseurDTO();
+        newFournisseur.setSociete("Nouveau Fournisseur SARL");
+        newFournisseur.setAdresse("456 Nouvelle Rue");
+        newFournisseur.setContact("Fatima-Ezzahra");
+        newFournisseur.setEmail("nouveau@test.com");
+        newFournisseur.setTelephone("0698765432");
+        newFournisseur.setVille("Rabat");
+        newFournisseur.setIce("009876543210001");
+
+        mockMvc.perform(post("/api/v1/fournisseurs")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(newFournisseur)))
+                .andExpect(status().isCreated())
+                .andExpect(jsonPath("$.id").exists())
+                .andExpect(jsonPath("$.societe").value("Nouveau Fournisseur SARL"))
+                .andExpect(jsonPath("$.email").value("nouveau@test.com"));
+    }
+
     
 }
 
