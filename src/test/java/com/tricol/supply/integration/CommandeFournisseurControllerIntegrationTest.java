@@ -134,6 +134,17 @@ class CommandeFournisseurControllerIntegrationTest {
                 .andExpect(status().isNotFound());
     }
 
+    @Test
+    @DisplayName("GET /api/v1/commandes/fournisseur/{id} - Doit retourner les commandes d'un fournisseur")
+    void testGetCommandesByFournisseur() throws Exception {
+        mockMvc.perform(get("/api/v1/commandes/fournisseur/{id}", testFournisseur.getId())
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$").isArray())
+                .andExpect(jsonPath("$[0].id").value(testCommande.getId()))
+                .andExpect(jsonPath("$[0].statut").value("EN_ATTENTE"));
+    }
+
     
 }
 
