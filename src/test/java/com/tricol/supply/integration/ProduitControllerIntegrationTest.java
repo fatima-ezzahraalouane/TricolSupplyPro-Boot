@@ -121,6 +121,15 @@ class ProduitControllerIntegrationTest {
                 "Le CUMP doit être recalculé selon la formule CUMP");
     }
 
-    
+    @Test
+    @DisplayName("GET /api/v1/produits/{id} - Doit retourner un produit par son ID")
+    void testGetProduitById() throws Exception {
+        mockMvc.perform(get("/api/v1/produits/{id}", testProduit.getId())
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.id").value(testProduit.getId()))
+                .andExpect(jsonPath("$.nom").value("Ordinateur Portable HP"))
+                .andExpect(jsonPath("$.coutUnitaireMoyen").value(5500.00));
+    }
 }
 
