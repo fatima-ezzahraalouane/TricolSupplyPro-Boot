@@ -140,7 +140,23 @@ class MouvementStockControllerIntegrationTest {
                 .andExpect(status().isNotFound());
     }
 
-    
+    @Test
+    @DisplayName("GET /api/v1/mouvements/produit/{id} - Doit retourner une liste vide si aucun mouvement")
+    void testGetMouvementsByProduit_EmptyList() throws Exception {
+        // creer un produit sans mouvement
+        Produit produitSansMouvement = Produit.builder()
+                .nom("Produit Sans Mouvement")
+                .prixUnitaire(new BigDecimal("1000.00"))
+                .stockActuel(0)
+                .build();
+        produitSansMouvement = produitRepository.save(produitSansMouvement);
+
+        mockMvc.perform(get("/api/v1/mouvements/produit/{produitId}", produitSansMouvement.getId())
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$").isArray())
+                .andExpect(jsonPath("$").isEmpty());
+    }
 }
 
 
