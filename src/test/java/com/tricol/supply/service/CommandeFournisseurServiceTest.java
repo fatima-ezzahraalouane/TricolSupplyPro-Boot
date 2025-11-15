@@ -134,6 +134,24 @@ class CommandeFournisseurServiceTest {
         verify(commandeMapper, times(1)).toDTO(any(CommandeFournisseur.class));
     }
 
+    @Test
+    @DisplayName("Doit retourner une commande par son ID")
+    void testFindById_Success() {
+        // Given
+        Long id = 1L;
+        when(commandeRepository.findById(id)).thenReturn(Optional.of(commande));
+        when(commandeMapper.toDetailDTO(commande)).thenReturn(detailDTO);
+
+        // When
+        CommandeFournisseurDetailDTO result = commandeService.findById(id);
+
+        // Then
+        assertNotNull(result);
+        assertEquals(id, result.getId());
+        verify(commandeRepository, times(1)).findById(id);
+        verify(commandeMapper, times(1)).toDetailDTO(commande);
+    }
+
     
 
 }
