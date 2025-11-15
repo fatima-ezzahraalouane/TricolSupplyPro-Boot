@@ -212,6 +212,30 @@ class CommandeFournisseurServiceTest {
         verify(produitRepository, never()).save(any(Produit.class));
     }
 
+    @Test
+    @DisplayName("Doit changer le statut de la commande")
+    void testChangerStatut_Success() {
+        // Given
+        Long id = 1L;
+        StatutCommande nouveauStatut = StatutCommande.VALIDEE;
+        
+        commande.setStatut(StatutCommande.EN_ATTENTE);
+        commande.setCommandeProduits(new ArrayList<>());
+        
+        when(commandeRepository.findById(id)).thenReturn(Optional.of(commande));
+        when(commandeRepository.save(any(CommandeFournisseur.class))).thenReturn(commande);
+        when(commandeMapper.toDetailDTO(any(CommandeFournisseur.class))).thenReturn(detailDTO);
+
+        // When
+        CommandeFournisseurDetailDTO result = commandeService.changerStatut(id, nouveauStatut);
+
+        // Then
+        assertNotNull(result);
+        ArgumentCaptor<CommandeFournisseur> commandeCaptor = ArgumentCaptor.forClass(CommandeFournisseur.class);
+        verify(commandeRepository, times(1)).save(commandeCaptor.capture());
+        assertEquals(nouveauStatut, commandeCaptor.getValue().getStatut());
+    }
+
     
 
 }
