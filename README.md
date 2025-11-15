@@ -628,12 +628,16 @@ Ouvrez ce fichier dans votre navigateur pour visualiser le rapport de couverture
 Après l'exécution, vous verrez dans le terminal :
 
 ```
-[INFO] Tests run: 45, Failures: 0, Errors: 0, Skipped: 0
+[INFO] Tests run: 56, Failures: 0, Errors: 0, Skipped: 0
 [INFO] 
 [INFO] ------------------------------------------------------------------------
 [INFO] BUILD SUCCESS
 [INFO] ------------------------------------------------------------------------
 ```
+
+**Répartition des tests** :
+- ✅ **Tests d'intégration** : 23 tests (CommandeFournisseur, Fournisseur, MouvementStock, Produit)
+- ✅ **Tests unitaires** : 33 tests (CommandeFournisseurService, FournisseurService, MouvementStockService, ProduitService)
 
 **Indicateurs** :
 - ✅ **Tests run** : Nombre total de tests exécutés
@@ -647,13 +651,13 @@ Le rapport JaCoCo fournit une analyse détaillée de la couverture de code :
 
 **Métriques principales** :
 
-| Métrique | Description | Objectif |
-|----------|-------------|----------|
-| **Instructions** | Pourcentage d'instructions exécutées | ≥ 50% |
-| **Branches** | Pourcentage de branches testées (if/else, switch) | ≥ 50% |
-| **Lines** | Pourcentage de lignes de code exécutées | ≥ 50% |
-| **Methods** | Pourcentage de méthodes testées | ≥ 50% |
-| **Classes** | Pourcentage de classes testées | 100% |
+| Métrique | Description | Objectif | Résultat actuel |
+|----------|-------------|----------|-----------------|
+| **Instructions** | Pourcentage d'instructions exécutées | ≥ 50% | **50%** (2,572 / 5,044) ✅ |
+| **Branches** | Pourcentage de branches testées (if/else, switch) | ≥ 50% | **12%** (63 / 504) ⚠️ |
+| **Lines** | Pourcentage de lignes de code exécutées | ≥ 50% | **76%** (457 / 598) ✅ |
+| **Methods** | Pourcentage de méthodes testées | ≥ 50% | **74%** (289 / 391) ✅ |
+| **Classes** | Pourcentage de classes testées | 100% | **100%** (35 / 35) ✅ |
 
 **Interprétation** :
 
@@ -670,20 +674,32 @@ Le rapport JaCoCo fournit une analyse détaillée de la couverture de code :
    - 🔴 **Rouge** : Lignes non couvertes
    - 🟡 **Jaune** : Branches partiellement couvertes
 
-**Exemple d'interprétation** :
+**Exemple d'interprétation (basé sur le rapport actuel)** :
 
 ```
-Total: 72% de couverture
-├── service/ : 85% ✅
-├── controller/ : 78% ✅
-├── repository/ : 45% ⚠️ (à améliorer)
-└── mapper/ : 90% ✅
+Total: 50% instructions, 12% branches
+├── controller/ : 90% instructions ✅ (excellente couverture)
+├── model.enums/ : 100% instructions ✅ (couverture complète)
+├── service/ : 75% instructions, 60% branches ✅ (bonne couverture)
+├── mapper/ : 73% instructions, 42% branches ✅ (acceptable)
+├── model.entity/ : 65% instructions, 27% branches ✅ (acceptable)
+├── exception/ : 42% instructions ⚠️ (à améliorer)
+└── dto/ : 17% instructions ⚠️ (faible couverture - normal pour les DTOs)
 ```
+
+**Note** : Les DTOs ont généralement une faible couverture car ce sont principalement des classes de données (getters/setters) qui sont testées indirectement via les tests d'intégration des contrôleurs.
 
 **Actions recommandées** :
-- ✅ Couverture ≥ 50% : Acceptable, continuer à maintenir
-- ⚠️ Couverture < 50% : Ajouter des tests pour les classes non couvertes
-- 🔍 Analyser les lignes rouges pour identifier les cas non testés
+- ✅ **Instructions (50%)** : Objectif atteint, au seuil minimum. Maintenir et améliorer si possible.
+- ⚠️ **Branches (12%)** : Faible couverture. Améliorer en testant plus de conditions (if/else, switch, exceptions).
+- ✅ **Lines (76%)** : Bonne couverture, continuer à maintenir.
+- ✅ **Methods (74%)** : Bonne couverture, continuer à maintenir.
+- ✅ **Classes (100%)** : Toutes les classes sont testées, excellent !
+
+**Points d'attention** :
+- 🔍 **Branches** : La couverture des branches est faible (12%). Ajouter des tests pour les cas d'erreur, les validations, et les conditions alternatives.
+- 📦 **DTOs** : La faible couverture des DTOs (17%) est acceptable car ils sont testés indirectement via les tests d'intégration.
+- 🎯 **Priorité** : Se concentrer sur l'amélioration de la couverture des branches pour atteindre au moins 50%.
 
 ### 📮 Collection Postman
 
