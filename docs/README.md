@@ -60,6 +60,14 @@ Chaque technologie est expliquée en détail dans un fichier séparé :
    - Flow d'une requête HTTP
    - Bonnes pratiques
 
+9. **[CUMP (Coût Unitaire Moyen Pondéré)](09-CUMP.md)**
+   - Qu'est-ce que le CUMP ?
+   - Formule mathématique et calcul
+   - Exemples concrets avec chiffres
+   - Implémentation dans le projet
+   - Comparaison CUMP vs FIFO
+   - Tests et validation
+
 ---
 
 ## 🎯 Comment utiliser cette documentation ?
@@ -79,6 +87,9 @@ Chaque technologie est expliquée en détail dans un fichier séparé :
 - "Pourquoi utiliser MapStruct ?"
 - "Comment gérez-vous les migrations de base de données ?"
 - "Expliquez la pagination dans votre API"
+- "**Qu'est-ce que le CUMP et comment le calculez-vous ?**"
+- "**Donnez un exemple concret de calcul CUMP avec des chiffres**"
+- "**Pourquoi avoir choisi CUMP plutôt que FIFO ?**"
 
 ---
 
